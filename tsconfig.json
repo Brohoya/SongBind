@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/lib/firebaseV9update.ts", "src/pages/platforms/login.jsx", "src/pages/_app.jsx", "src/pages/api/auth/signin/spotify.js", "src/pages/api/auth/signin/spotify.js", "src/lib/AuthStateChanged.tsz"],
+  "exclude": ["node_modules"]
+}

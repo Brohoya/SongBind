@@ -1,0 +1,15 @@
+<svg width="67" height="94" viewBox="0 0 67 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse cx="8.73913" cy="87.8957" rx="8.73913" ry="5.82609" fill="black"/>
+<ellipse cx="57.7391" cy="85.5652" rx="8.73913" ry="5.82609" fill="black"/>
+<rect x="15" y="2.5" width="49" height="50" rx="9.5" stroke="black" stroke-width="5"/>
+<rect x="15" y="2.5" width="49" height="50" rx="9.5" stroke="black" stroke-opacity="0.2" stroke-width="5"/>
+<rect x="15" y="2.5" width="49" height="65" rx="9.5" stroke="black" stroke-width="5"/>
+<rect x="15" y="2.5" width="49" height="65" rx="9.5" stroke="black" stroke-opacity="0.2" stroke-width="5"/>
+<rect x="15" y="2.5" width="49" height="35" rx="9.5" stroke="black" stroke-width="5"/>
+<rect x="15" y="2.5" width="49" height="20" rx="9.5" stroke="black" stroke-width="5"/>
+<line x1="15" y1="18.5652" x2="15" y2="87.8956" stroke="black" stroke-width="5"/>
+<line x1="64" y1="16.2348" x2="64" y2="85.5652" stroke="black" stroke-width="5"/>
+<rect x="34" y="29" width="11.6522" height="2.91304" rx="1.45652" fill="black"/>
+<path d="M34 45.4565C34 44.6521 34.6521 44 35.4565 44H44.1957C45.0001 44 45.6522 44.6521 45.6522 45.4565V45.4565C45.6522 46.2609 45.0001 46.913 44.1957 46.913H35.4565C34.6521 46.913 34 46.2609 34 45.4565V45.4565Z" fill="black"/>
+<path d="M34 60.4565C34 59.6521 34.6521 59 35.4565 59H44.1957C45.0001 59 45.6522 59.6521 45.6522 60.4565V60.4565C45.6522 61.2609 45.0001 61.913 44.1957 61.913H35.4565C34.6521 61.913 34 61.2609 34 60.4565V60.4565Z" fill="black"/>
+</svg>
