@@ -36,10 +36,10 @@ function GoogleSignInButton() {
     );
 };
 
-
 function GithubSignInButton() {
+    const {loginWithGithub} = useAuth()
     return (
-        <button className='' onClick={() => {}}>
+        <button className='' onClick={() => loginWithGithub()}>
             <div className="flex flex-row my-auto font-bold ring-4 ring-gray-800 hover:ring-offset-1 transition-all delay-50 ease-linear p-2 rounded-lg justify-center">
                 <Image src={'/github.png'} width={'25'} height={'25'} />
                 &nbsp; Log in with Github

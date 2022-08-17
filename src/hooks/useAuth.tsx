@@ -26,12 +26,19 @@ export function AuthProvider(props) {
 		router.push('/dashboard');
 	};
 
+    const loginWithGithub = async () => {
+        const { user, error } = await AuthService.loginWithGithub();
+		setUser(user ?? null);
+		setError(error ?? "");
+		router.push('/dashboard');
+    }
+
 	const logout = async () => {
 		await AuthService.logout();
 		setUser(null);
 		router.push('/');
 	};
-	const value = { user, error, loginWithGoogle, logout, setUser };
+	const value = { user, error, loginWithGoogle, loginWithGithub, logout, setUser };
 
 	return <authContext.Provider value={value} {...props} />;
 }
