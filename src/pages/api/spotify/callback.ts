@@ -7,7 +7,16 @@ export default async function handler(req, res) {
     const code = req.query.code || null;
     const state = req.query.state || null;
 
-    const redirect_uri = 'http://localhost:3000/api/auth/callback/spotify';
+    var protocol = 'https';
+    const host = req.headers.host;
+
+    if(req.headers.host === 'localhost:3000') {
+        protocol = 'http';
+    }
+
+    console.log(req.headers);
+
+    const redirect_uri = `${protocol}://${host}/api/spotify/callback`;
 
     if (state === null) {
         res.redirect('/platforms/#' + new URLSearchParams({ error: 'state_mismatch' }));
@@ -45,13 +54,12 @@ export default async function handler(req, res) {
 
                 cookies.set('songbind_spotify_auth', JSON.stringify({access_token: access_token, refresh_token: refresh_token}))
         
-                // we can also pass the token to the browser to make requests from there
                 // res.redirect(`/platforms/#${new URLSearchParams({
                 //     access_token: access_token,
                 //     refresh_token: refresh_token
                 // }).toString()}`)
 
-                res.redirect(`/platforms/`);
+                res.redirect('/platforms/');
             } else {
                 res.redirect(`/platforms/#${new URLSearchParams({
                     error: 'invalid_token'

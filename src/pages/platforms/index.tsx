@@ -15,7 +15,7 @@ const Platforms: NextPage = () => {
                 <ul className="flex flex-col space-y-5 mt-5 w-6/12 mx-auto">
                     <button className="rounded-lg ring-2 ring-black py-2 "
                             onClick={ async () => {
-                                router.push('/api/auth/signin/spotify');
+                                router.push('/api/spotify/signin');
                             }}>
                         Login to your Spotify account
                     </button>
