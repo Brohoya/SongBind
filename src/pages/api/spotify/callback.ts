@@ -14,8 +14,6 @@ export default async function handler(req, res) {
         protocol = 'http';
     }
 
-    console.log(req.headers);
-
     const redirect_uri = `${protocol}://${host}/api/spotify/callback`;
 
     if (state === null) {
