@@ -50,8 +50,14 @@ export default async function handler(req, res) {
 
                 const cookies = new Cookies(req, res);
 
-                cookies.set('songbind_spotify_auth', JSON.stringify({access_token: access_token, refresh_token: refresh_token}))
-        
+                cookies.set('songbind_spotify_auth', JSON.stringify({
+                    access_token: access_token, 
+                    refresh_token: refresh_token
+                }), {httpOnly: true})
+
+                // console.log(body);
+                // console.log(cookies.get('songbind_spotify_auth'));
+
                 // res.redirect(`/platforms/#${new URLSearchParams({
                 //     access_token: access_token,
                 //     refresh_token: refresh_token

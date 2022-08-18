@@ -1,5 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { scopes } from "../../../lib/spotify";
+import { scopes } from "../../../lib/Spotify";
+
+const generateRandomString = (length) => {
+    var text = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  
+    for (var i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+};
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
 
@@ -11,15 +21,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     }
 
     if(req.headers.referer === `${protocol}://${req.headers.host}/platforms`) {
-        const generateRandomString = (length) => {
-            var text = '';
-            var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-          
-            for (var i = 0; i < length; i++) {
-              text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
-        };
         
         const state = generateRandomString(16);
         const redirect_uri = `${protocol}://${host}/api/spotify/callback`;
@@ -35,6 +36,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     
         res.redirect(LOGIN_URL);
     } else {
-        res.redirect(`${protocol}://${req.headers.host}`)
+        res.redirect(403, `${protocol}://${req.headers.host}`)
     }
 }

@@ -1,7 +1,7 @@
 import { User } from "firebase/auth";
 import { useRouter } from "next/router";
 import { createContext, useContext, useState } from "react";
-import AuthService from "../service/AuthService";
+import AuthService from "../lib/AuthService";
 
 interface IUserContext {
     user: User | undefined | null;

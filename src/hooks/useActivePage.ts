@@ -1,12 +1,4 @@
 import { useRouter } from 'next/router';
-// import { createContext } from 'react';
-
-// interface IActivePageContext {
-//     activePage: string | null,
-//     setActivePage: Function | null,
-// }
-
-// export const ActivePageContext = createContext<IActivePageContext>({activePage: null, setActivePage: null});
 
 export default function useActivePage() {
     const router = useRouter();

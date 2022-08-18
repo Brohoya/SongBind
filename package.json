@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "cookies": "^0.8.0",
+    "cookies-next": "^2.1.1",
     "firebase": "^9.9.2",
     "next": "12.2.4",
     "react": "18.2.0",
