@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
 
 // Import SVGs
 import Logo from "../assets/webapp/sidebar/logo.svg";
@@ -14,6 +15,20 @@ import getActivePage from "../hooks/useActivePage";
 
 export default function Sidebar() {
     // const activePage = useContext(ActivePageContext);
+    const [platforms, setPlatforms] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        setIsLoading(true);
+        fetch('/api/connectedPlatforms', {method: 'GET'})
+            .then((res) => res.json())
+            .then((data) => {
+                setPlatforms(data);
+                setIsLoading(false);
+            })
+    }, []);
+
+    // console.log(platforms);
 
     return(
         <div className="sidebar">
@@ -53,6 +68,22 @@ export default function Sidebar() {
                     Platforms :
                 </li>
 
+
+                {
+                    isLoading ? 
+                        <RotatingLines
+                            strokeColor="grey"
+                            strokeWidth="5"
+                            animationDuration="0.75"
+                            width="96"
+                            visible={true}
+                        />
+                        :
+                        Object?.values(platforms)?.map(platform => {
+                            if(platform.connected) return <Platform key={platform.name} name={platform.name} img={platform.img} />
+                        })
+                }
+
                 <AddPlatform />
 
 
@@ -76,13 +107,27 @@ const SidebarItem = ({ title, img, pageName }: {title: string, img: string, page
     );
 }
 
-const AddPlatform = () => {
-    // const { setActivePage } = useContext(ActivePageContext);
+const Platform = ({name, img}) => {
 
     return (
         <li>
             <Link href={'/platforms'}>
-                <button onClick={() => {/*setActivePage("Connect your platforms")*/}} className={'platforms'}>
+                <button onClick={() => {}} className={'sidebarItem bg-transparent'}>
+                    <Image src={`/streamingPlatforms/${img}.png`} width={"25"} height={"25"} priority />
+                    {/* <img src={`/streamingPlatforms/${img}.png`} alt=""/> */}
+                    &nbsp; {name}
+                </button>
+            </Link>
+        </li>
+    )
+}
+
+const AddPlatform = () => {
+
+    return (
+        <li>
+            <Link href={'/platforms'}>
+                <button onClick={() => {}} className={'platforms'}>
                     +
                 </button>
             </Link>

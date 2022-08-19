@@ -1,5 +1,5 @@
 import '../styles/global.css';
-import '../lib/firebase.config';
+import '../lib/Firebase.config';
 import type { AppProps } from 'next/app';
 import { AuthProvider } from '../hooks/useAuth';
 import AppLayout from '../components/AppLayout';

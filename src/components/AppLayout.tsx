@@ -1,6 +1,7 @@
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import { useRouter } from "next/router";
+import { PlatformsProvider } from "../hooks/usePlatforms";
 
 type AppLayout = {
     children?: JSX.Element
@@ -18,11 +19,13 @@ export default function AppLayout({ children }: AppLayout): JSX.Element {
         return children
     } else {
         return (
-            <main>
-                <Navbar />
-                <Sidebar/>
-                <div> { children } </div>
-            </main>
+            <PlatformsProvider>
+                <main>
+                    <Navbar />
+                    <Sidebar/>
+                    <div> { children } </div>
+                </main>
+            </PlatformsProvider>
         )
     }
 }
