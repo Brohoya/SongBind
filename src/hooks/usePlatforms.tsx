@@ -27,7 +27,7 @@ export function PlatformsProvider(props) {
     return <platformContext.Provider value={value} {...props} />;
 }
 
-export function useConnectedPlatforms(req, res) {
+export function ConnectedPlatforms(req, res) {
     var cookies = new Cookies(req, res);
 
     const spotify = cookies.get('songbind_spotify_auth') !== undefined  ? true : false;
