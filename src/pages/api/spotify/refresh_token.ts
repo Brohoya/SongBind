@@ -16,10 +16,14 @@ export default function handler(req, res) {
 
     request.post(authOptions, function(error, response, body) {
         if (!error && response.statusCode === 200) {
-            var access_token = body.access_token;
-            res.send({
-                'access_token': access_token
-            });
+            const cookies = new Cookies(req, res);
+
+            cookies.set('songbind_spotify_auth', JSON.stringify({
+                access_token: body.access_token, 
+                refresh_token: body.refresh_token
+            }), {path: '/', httpOnly: true})
+
+            res.redirect('/dashboard');
         }
     });
 }

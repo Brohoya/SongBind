@@ -1,4 +1,4 @@
-import { getSpotifyTopTracks } from '../../../lib/spotify';
+import { getSpotifyTopTracks } from '../../../lib/Spotify';
 
 export default async (req, res) => {
   const response = await getSpotifyTopTracks();
