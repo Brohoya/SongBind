@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { scopes } from "../../../lib/Spotify";
+import { scopes } from "../../../lib/spotify";
 
 const generateRandomString = (length) => {
     var text = '';
