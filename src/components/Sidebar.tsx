@@ -12,11 +12,21 @@ import Playlists from "../assets/webapp/sidebar/playlist.svg";
 import Dashboard from "../assets/webapp/sidebar/dashboard.svg";
 import getActivePage from "../hooks/useActivePage";
 
+type Platform = {
+    name: string,
+    connected: boolean,
+    api: string,
+    img: string,
+}
 
-export default function Sidebar() {
+type Platforms = {
+    [key: string] : Platform
+}
+
+export default function Sidebar(): JSX.Element {
     // const activePage = useContext(ActivePageContext);
-    const [platforms, setPlatforms] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [platforms, setPlatforms] = useState<Platforms>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
         setIsLoading(true);
@@ -79,7 +89,7 @@ export default function Sidebar() {
                             visible={true}
                         />
                         :
-                        Object?.values(platforms)?.map(platform => {
+                        Object.values(platforms).map(platform => {
                             if(platform.connected) return <Platform key={platform.name} name={platform.name} img={platform.img} />
                         })
                 }
