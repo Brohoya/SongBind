@@ -21,19 +21,19 @@ export default function handler(
 ) {
     var cookies = new Cookies(req, res);
 
-    const spotify_connected = cookies.get('songbind_spotify_auth') !== undefined || cookies.get('songbind_spotify_auth') === '' ? true : false;
+    const spotify_connected = cookies.get('songbind_spotify_auth') !== undefined ? true : false;
     const spotify_userInfo = spotify_connected ? JSON.parse(cookies.get('songbind_spotify_auth')).user : null;
 
-    const yt_connected  = cookies.get('songbind_yt_auth') ? true : false;
+    const yt_connected  = cookies.get('songbind_yt_auth') !== undefined ? true : false;
     const yt_userInfo = yt_connected ? JSON.parse(cookies.get('songbind_yt_auth')).user : null;
 
-    const appleMusic_connected  = cookies.get('songbind_appleMusic_auth') ? true : false;
+    const appleMusic_connected  = cookies.get('songbind_appleMusic_auth') !== undefined ? true : false;
     const appleMusic_userInfo = appleMusic_connected ? JSON.parse(cookies.get('songbind_appleMusic_auth')).user : null;
 
-    const deezer_connected  = cookies.get('songbind_deezer_auth') ? true : false;
+    const deezer_connected  = cookies.get('songbind_deezer_auth') !== undefined ? true : false;
     const deezer_userInfo = deezer_connected ? JSON.parse(cookies.get('songbind_deezer_auth')).user : null;
 
-    const soundCloud_connected  = cookies.get('songbind_soundCloud_auth') ? true : false;
+    const soundCloud_connected  = cookies.get('songbind_soundCloud_auth') !== undefined ? true : false;
     const soundCloud_userInfo = soundCloud_connected ? JSON.parse(cookies.get('songbind_soundCloud_auth')).user : null;
 
 

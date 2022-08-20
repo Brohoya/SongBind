@@ -21,20 +21,11 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     }
 
     if(req.headers.referer === `${protocol}://${req.headers.host}/platforms`) {
+        const redirect_uri = `${protocol}://${host}/api/soundCloud/callback`;
+    
         
-        const state = generateRandomString(16);
-        const redirect_uri = `${protocol}://${host}/api/spotify/callback`;
     
-        const queryParamString = new URLSearchParams({
-            response_type: 'code',
-            client_id: process.env.SPOTIFY_CLIENT_ID,
-            redirect_uri: redirect_uri,
-            scope: scopes,
-            state: state,
-        });
-        const LOGIN_URL = `https://accounts.spotify.com/authorize?${queryParamString.toString()}`;
-    
-        res.redirect(LOGIN_URL);
+        res.redirect('/platforms/');
     } else {
         res.redirect(403, `${protocol}://${req.headers.host}`)
     }

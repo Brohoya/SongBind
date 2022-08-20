@@ -9,7 +9,7 @@ import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
 const Platforms: NextPage = () => {
     const {platforms, isLoading}: IPlatforms  = usePlatforms();
 
-    // if(!isLoading) console.log(platforms);
+    if(!isLoading) console.log(platforms);
     
     return (
         <div className="app">
@@ -24,7 +24,7 @@ const Platforms: NextPage = () => {
                         })
                     }
                 </ul>
-                <h3 className="text-center text-lg mt-10">Only spotify connection is avaible for now</h3>
+                <h3 className="text-center text-lg mt-10">Only Spotify and Youtube connections are avaible for now</h3>
             </div>
 
 
