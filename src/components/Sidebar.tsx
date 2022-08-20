@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useContext, useEffect, useState } from "react";
-import { RotatingLines } from "react-loader-spinner";
+import { Bars } from "react-loader-spinner";
 
 // Import SVGs
 import Logo from "../assets/webapp/sidebar/logo.svg";
@@ -53,14 +52,17 @@ export default function Sidebar(): JSX.Element {
 
 
                 {
-                    isLoading ? 
-                        <RotatingLines
-                            strokeColor="grey"
-                            strokeWidth="5"
-                            animationDuration="0.75"
-                            width="96"
-                            visible={true}
-                        />
+                    isLoading ?
+                        <div className="flex mx-auto justify-center">
+                            <Bars
+                                height="35"
+                                color="#333333"
+                                ariaLabel="bars-loading"
+                                wrapperStyle={{}}
+                                wrapperClass=""
+                                visible={true}
+                            />
+                        </div>
                         :
                         Object.values(platforms).map(platform => {
                             if(platform.connected) return <Platform key={platform.name} name={platform.name} img={platform.img} />
