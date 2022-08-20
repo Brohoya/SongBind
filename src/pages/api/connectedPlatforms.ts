@@ -55,7 +55,7 @@ export default function handler(
         appleMusic: {
             name: 'Apple Music',
             connected: appleMusic_connected ,
-            img: 'appleMusic',
+            img: 'applemusic',
             api: 'appleMusic',
             user: appleMusic_userInfo
         },
@@ -69,7 +69,7 @@ export default function handler(
         soundCloud: {
             name: 'SoundCloud',
             connected: soundCloud_connected ,
-            img: 'soundCloud',
+            img: 'soundcloud',
             api: 'soundCloud',
             user: soundCloud_userInfo
         },
