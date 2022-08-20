@@ -11,34 +11,11 @@ import Explore from "../assets/webapp/sidebar/explore.svg";
 import Playlists from "../assets/webapp/sidebar/playlist.svg";
 import Dashboard from "../assets/webapp/sidebar/dashboard.svg";
 import getActivePage from "../hooks/useActivePage";
+import usePlatforms, { IPlatforms } from "../hooks/usePlatforms";
 
-type Platform = {
-    name: string,
-    connected: boolean,
-    api: string,
-    img: string,
-}
-
-type Platforms = {
-    [key: string] : Platform
-}
 
 export default function Sidebar(): JSX.Element {
-    // const activePage = useContext(ActivePageContext);
-    const [platforms, setPlatforms] = useState<Platforms>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        setIsLoading(true);
-        fetch('/api/connectedPlatforms', {method: 'GET'})
-            .then((res) => res.json())
-            .then((data) => {
-                setPlatforms(data);
-                setIsLoading(false);
-            })
-    }, []);
-
-    // console.log(platforms);
+    const {platforms, isLoading}: IPlatforms = usePlatforms();
 
     return(
         <div className="sidebar">
@@ -69,10 +46,6 @@ export default function Sidebar(): JSX.Element {
                 <SidebarItem title={"Playlist creator"} pageName={"playlistCreator"} img={PlaylistCreator} />
                 <SidebarItem title={"Transfer"} pageName={"transfer"} img={Transfer} />
                 <SidebarItem title={"Explore"} pageName={"explore"} img={Explore} />
-
-                {/* <SidebarItem title={"Artists"} img={Artists} />
-                <SidebarItem title={"Songs"} img={Songs} />
-                <SidebarItem title={"Genres"} img={Genres} /> */}
 
                 <li className="mt-10">
                     Platforms :

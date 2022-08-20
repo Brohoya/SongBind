@@ -35,7 +35,8 @@ export default async function handler(req, res) {
             if (!error && response.statusCode === 200) {
         
                 var access_token = body.access_token,
-                    refresh_token = body.refresh_token;
+                    refresh_token = body.refresh_token,
+                    expiration_date = Date.now() + body.expires_in * 1000;
         
                 var options = {
                     url: 'https://api.spotify.com/v1/me',
@@ -44,28 +45,34 @@ export default async function handler(req, res) {
                 };
         
                 // use the access token to access the Spotify Web API
-                // request.get(options, function(error, response, body) {
-                //     console.log(body);
-                // });
+                request.get(options, function(error, response, body) {
+                    if (!error && response.statusCode === 200) {
+                        var username = body.display_name,
+                            email = body.email,
+                            uid = body.id,
+                            img = body.images[0].url;
 
-                const cookies = new Cookies(req, res);
+                        const cookies = new Cookies(req, res);
 
-                cookies.set('songbind_spotify_auth', JSON.stringify({
-                    access_token: access_token, 
-                    refresh_token: refresh_token
-                }), {path: '/', httpOnly: true})
+                        cookies.set('songbind_spotify_auth', JSON.stringify({
+                            access_token: access_token, 
+                            refresh_token: refresh_token,
+                            expiration_date: expiration_date,
+                            user: {
+                                username: username,
+                                email: email,
+                                uid: uid,
+                                img: img
+                            }
+                        }), {path: '/', httpOnly: true})
 
-                // {httpOnly: true}
-
-                // console.log(body);
-                // console.log(cookies.get('songbind_spotify_auth'));
-
-                // res.redirect(`/platforms/#${new URLSearchParams({
-                //     access_token: access_token,
-                //     refresh_token: refresh_token
-                // }).toString()}`)
-
-                res.redirect('/platforms/');
+                        res.redirect('/platforms/');
+                    } else {
+                        res.redirect(`/platforms/#${new URLSearchParams({
+                            error: 'cookie not created properly'
+                        }).toString()}`);
+                    }
+                });
             } else {
                 res.redirect(`/platforms/#${new URLSearchParams({
                     error: 'invalid_token'
@@ -74,3 +81,8 @@ export default async function handler(req, res) {
         });
     }
 }
+
+// res.redirect(`/platforms/#${new URLSearchParams({
+                //     access_token: access_token,
+                //     refresh_token: refresh_token
+                // }).toString()}`)

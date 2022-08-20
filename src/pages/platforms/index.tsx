@@ -1,46 +1,25 @@
-import { GetServerSideProps, NextPage } from "next";
+import { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { RotatingLines } from "react-loader-spinner";
 import { UseProtectedRoute } from "../../components/Routing";
-import usePlatforms, {ConnectedPlatforms} from "../../hooks/usePlatforms";
-// import Cookies from 'cookies';
+import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
 
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const platforms = ConnectedPlatforms(ctx.req, ctx.res);
-    // const {setPlatforms} = usePlatforms();
-    // setPlatforms(platforms);
+const Platforms: NextPage = () => {
+    const {platforms, isLoading}: IPlatforms  = usePlatforms();
 
-    return { props: platforms }
-}
-
-type Platform = {
-    name: string,
-    connected: boolean,
-    api: string,
-    img: string,
-}
-
-type Platforms = {
-    [key: string] : Platform
-}
-
-// :InferGetServerSidePropsType<typeof getServerSideProps>
-const Platforms: NextPage = (platforms: Platforms) => {
-    const router = useRouter();
-    console.log(platforms);
-    // const platforms = useConnectedPlatforms();
-    // const {getPlatforms} = usePlatforms()
-    // const data = getPlatforms();
-    // console.log(data);
+    // if(!isLoading) console.log(platforms);
     
     return (
         <div className="app">
             <div className="mx-auto">
                 <h1 className="text-center font-bold text-3xl">Connect your platforms : </h1>
                 <ul className="flex flex-col space-y-5 mt-10 w-6/12 mx-auto">
-                    {
-                        Object.values(platforms).slice(1).map(platform => {
+                    {isLoading ?
+                        <></>
+                        :
+                        Object.values(platforms).map(platform => {
                             return <Platform key={platform.name} name={platform.name} connected={platform.connected} api={platform.api} img={platform.img} size={[]} />
                         })
                     }
@@ -53,27 +32,6 @@ const Platforms: NextPage = (platforms: Platforms) => {
     );
 }
 
-{/* <li className="rounded-full ring-2 ring-gray-700 p-2 flex flex-row justify-between">
-        <div className="flex flex-row h-10">
-            <img src="/streamingPlatforms/spotify.png" alt=""/>
-            <h3 className="my-auto font-bold text-xl"> &nbsp; Spotify </h3>
-        </div>
-        <button className="rounded-full p-2 bg-[rgba(242,201,76,1)] hover:ring-4 ring-gray-700 font-bold"
-                onClick={ async () => {
-                    router.push('/api/spotify/signin');
-                }}>
-            Connect
-        </button>
-    </li>
-
-    <button className="rounded-lg ring-2 ring-black py-2 "
-            onClick={ () => {
-                router.push('/api/spotify/topTracks');
-            }}>
-        Login to your Youtube account
-    </button>
-    */}
-
 export default UseProtectedRoute(Platforms);
 
 type IPlatform = {
@@ -83,9 +41,7 @@ type IPlatform = {
     img: string, 
     api: string,
     size?: []
-    // providers: BuiltInProviderType
 }
-
 
 const Platform = ({ name, connected, img, size, api }: IPlatform): JSX.Element => {
     const router = useRouter();
@@ -105,3 +61,4 @@ const Platform = ({ name, connected, img, size, api }: IPlatform): JSX.Element =
         </li>
     );
 }
+
