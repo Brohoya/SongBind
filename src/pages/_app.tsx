@@ -8,13 +8,13 @@ import AuthStateChanged from '../components/AuthStateChanged';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
 
-  return (
-    <AuthProvider>
-      <AppLayout>
-        <AuthStateChanged>
-          <Component {...pageProps} />
-        </AuthStateChanged>
-      </AppLayout>
-    </AuthProvider>
-  );
+    return (
+        <AuthProvider>
+            <AppLayout>
+                <AuthStateChanged>
+                <Component {...pageProps} />
+                </AuthStateChanged>
+            </AppLayout>
+        </AuthProvider>
+    );
 }

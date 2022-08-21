@@ -57,7 +57,7 @@ const Home: NextPage = () => {
             <div className='w-6/12 flex flex-col mt-20 mx-auto space-y-10 text-center'>
               <Link href={'/login'}>
                 <div className='open-login text-2xl'>
-                    Login
+                    Get started
                 </div>
               </Link>
               <h2 className='text-2xl font-bold text-gray-600'>OR</h2>

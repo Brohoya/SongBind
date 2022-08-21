@@ -21,7 +21,7 @@ export function UseProtectedRoute(Component) {
 		const router = useRouter();
 
 		if (!auth.user) {
-			router.replace("/login");
+			router.push("/");
 			return <h1>Loading...</h1>;
 		}
 		return <Component auth={auth} {...props} />;

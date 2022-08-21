@@ -91,4 +91,33 @@
         hover:border-gray-900 hover:text-gray-900 transition-all duration-200 ease-linear;
     }
 
+
+
+}
+
+
+@layer utilities {
+    /* Switch box around slider */
+    .switch {
+        @apply relative cursor-pointer w-24 h-10 ring-2 ring-gray-800 rounded-full my-auto
+    }
+
+    /* Hidding default HTML checkbox */
+    .switch input {
+        @apply opacity-0 w-0 h-0
+    }
+
+    .switch label {
+        @apply relative top-[0.45rem] transition-all duration-75 ease-linear cursor-pointer
+    }
+
+    /* The slider */
+    .slider {
+        @apply w-8 h-8 absolute top-1 left-1 z-20 bg-white peer-checked:left-[3.75rem]
+        rounded-full ring-2 ring-gray-700 transition-all duration-75 ease-linear
+    }
+
+    .selectors {
+        @apply 
+    }
 }

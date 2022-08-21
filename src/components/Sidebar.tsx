@@ -7,7 +7,7 @@ import Logo from "../assets/webapp/sidebar/logo.svg";
 import PlaylistCreator from "../assets/webapp/sidebar/creator.svg";
 import Transfer from "../assets/webapp/sidebar/transfer.svg";
 import Explore from "../assets/webapp/sidebar/explore.svg";
-import Playlists from "../assets/webapp/sidebar/playlist.svg";
+import Library from "../assets/webapp/sidebar/library.svg";
 import Dashboard from "../assets/webapp/sidebar/dashboard.svg";
 import getActivePage from "../hooks/useActivePage";
 import usePlatforms, { IPlatforms } from "../hooks/usePlatforms";
@@ -36,7 +36,7 @@ export default function Sidebar(): JSX.Element {
                 </li>
 
                 <SidebarItem title={"Dashboard"} pageName={"dashboard"} img={Dashboard} />
-                <SidebarItem title={"Library"} pageName={"library"} img={Playlists} />
+                <SidebarItem title={"Library"} pageName={"library"} img={Library} />
 
                 <li className="mt-10">
                     Tools :

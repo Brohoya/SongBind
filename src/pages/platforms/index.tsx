@@ -1,7 +1,6 @@
 import { NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { RotatingLines } from "react-loader-spinner";
 import { UseProtectedRoute } from "../../components/Routing";
 import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
 
@@ -9,7 +8,7 @@ import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
 const Platforms: NextPage = () => {
     const {platforms, isLoading}: IPlatforms  = usePlatforms();
 
-    if(!isLoading) console.log(platforms);
+    // if(!isLoading) console.log(platforms);
     
     return (
         <div className="app">
