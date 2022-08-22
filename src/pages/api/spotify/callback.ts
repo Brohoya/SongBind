@@ -1,7 +1,6 @@
 var request = require('request');
 var Cookies = require('cookies');
 
-
 export default async function handler(req, res) {
 
     const code = req.query.code || null;

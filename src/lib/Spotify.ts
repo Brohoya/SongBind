@@ -39,16 +39,12 @@ export const scopes = [
     'user-library-read'
 ].join(',');
 
-const queryParamString = new URLSearchParams({scope: scopes});
-export const LOGIN_URL = `https://accounts.spotify.com/authorize?${queryParamString.toString()}`;
-
 const spotifyApi = new SpotifyWebApi({
     clientId: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET
 });
 
 export default spotifyApi;
-
 
 
 const getAccessToken = async () => {
@@ -78,3 +74,7 @@ export const getSpotifyTopTracks = async () => {
     }
   });
 };
+
+export const getSpotifyPlaylists = async () => {
+    
+}

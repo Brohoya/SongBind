@@ -16,7 +16,7 @@ export default function Navbar() {
                 </li>
                 
                 {/* User profile button */}
-                <li className="flex flex-row mr-5">
+                <li className="flex flex-row mr-10">
                     <p className="my-auto"> Connected as &nbsp; </p>
                     <Link href={'/profile'}>
                         <div className="userProfile">

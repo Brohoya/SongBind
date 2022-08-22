@@ -42,7 +42,13 @@ const Transfer = ({ platforms }) => {
     const [selectedPlatform, setSelectedPlatform] = useState(platforms[0] ?? null);
     const [selectedContent, setSelectedContent] = useState('playlists');
     const [loaded, setLoaded] = useState(false);
-    const [query, setQuery] = useState(null)
+    const [query, setQuery] = useState({
+        direction: 'export',
+        platform: selectedPlatform,
+        content: selectedContent
+    });
+    const [data, setData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         setLoaded(false);
@@ -69,14 +75,25 @@ const Transfer = ({ platforms }) => {
                 <PlatformSelector platforms={platforms} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform}  />
 
                 {!loaded ? 
-                    <LoadButton setLoaded={setLoaded} />
+                    <LoadButton setLoaded={setLoaded} query={query} setData={setData} setIsLoading={setIsLoading} />
                     :
-                    toggleChecked ? <ImportButton /> : <ExportButton />
+                    toggleChecked ? <ImportButton query={query} setData={setData} /> : <ExportButton query={query} setData={setData} />
                 }
 
             </div>
-            <div className="mt-5">
-                <h1> {platforms.length} platforms connected: music transfer component rendered </h1>
+            <div className="mt-5 overflow-auto">
+                <Loader show={isLoading} />
+                {/* <h1> {platforms.length} platforms connected: music transfer component rendered </h1> */}
+                <div className="flex flex-col">
+
+                    {loaded && data != undefined ? 
+                        data.map(content => {
+                            return <h3 key={content.id}> {content.name}</h3>
+                        })
+                        :
+                        null
+                    }
+                </div>
 
             </div>
 
@@ -84,38 +101,76 @@ const Transfer = ({ platforms }) => {
     )
 }
 
-const ImportButton = () => {
+const ImportButton = ({ query, setData }) => {
+
+    // const sendQuery = () => {
+        
+    // }
 
     return (
         <button onClick={() => {}} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-[rgba(242,201,76,1)]">
             <div className="flex flex-row">
-                <Image src={Import} width='20' height='20' />
+                <Image src={Import} width='20' height='20' priority />
                 <h3 className="text-lg font-bold"> &nbsp; Import</h3>
             </div>
         </button>
     )
 }
 
-const ExportButton = () => {
+const ExportButton = ({ query, setData }) => {
 
     return (
         <button onClick={() => {}} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-[rgba(242,201,76,1)]">
             <div className="flex flex-row">
-                <Image src={Export} width='20' height='20' />
+                <Image src={Export} width='20' height='20' priority />
                 <h3 className="text-lg font-bold"> &nbsp; Export</h3>
             </div>
         </button>
     )
 }
 
-const LoadButton = ({ setLoaded }) => {
+const LoadButton = ({ setLoaded, setData, setIsLoading, query }) => {
 
-    const handleChange = () => setLoaded(true);
+    const load = async () => {
+        setIsLoading(true);
+        let dataQuery;
+        if(query.direction === 'import') {
+            switch (query.content) {
+                case 'playlists':
+                    switch(query.platform.api) {
+                        case 'youtube': break;
+                        case 'spotify':
+                            dataQuery = await fetch('/api/spotify/get/playlists', { method: 'GET' });
+                            break;
+                    }
+                    break;
+                case 'songs':
+                    switch(query.platform.api) {
+                        case 'youtube': break;
+                        case 'spotify': break;
+                    }
+                    break;
+                case 'artists':
+                    switch(query.platform.api) {
+                        case 'youtube': break;
+                        case 'spotify': break;
+                    }
+                    break;
+            }
+        } else {
+
+        }
+        let data;
+        if(dataQuery !== undefined) data = await dataQuery.json();
+        setData(data);
+        setLoaded(true);
+        setIsLoading(false);
+    };
 
     return (
-        <button onClick={handleChange} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-gray-300">
+        <button onClick={load} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-gray-300">
             <div className="flex flex-row">
-                <Image src={Load} width='20' height='20' />
+                <Image src={Load} width='20' height='20' priority />
                 <h3 className="text-lg font-bold"> &nbsp; Load</h3>
             </div>
         </button>
