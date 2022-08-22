@@ -52,15 +52,12 @@ const Transfer = ({ platforms }) => {
 
     useEffect(() => {
         setLoaded(false);
-    }, [toggleChecked, selectedPlatform, selectedContent])
-
-    useEffect(() => {
         setQuery({
             direction: toggleChecked ? 'import' : 'export',
             platform: selectedPlatform,
             content: selectedContent
         });
-    }, [loaded])
+    }, [toggleChecked, selectedPlatform, selectedContent]);
 
     return (
         <div className="flex flex-col p-5 ring-2 ring-gray-700 rounded-3xl h-full">
