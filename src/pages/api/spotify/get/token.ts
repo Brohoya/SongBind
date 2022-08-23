@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getUserPlaylists } from "../../../../lib/Spotify";
+import { getSavedSongs } from "../../../../lib/Spotify";
 var Cookies = require('cookies');
 
 
@@ -30,9 +30,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             cookies.set('songbind_spotify_auth', JSON.stringify(userInfo), {path: '/', httpOnly: true})
         }
 
-        const playlists = await getUserPlaylists();
-
-        res.status(200).json(playlists);
+        res.status(200).json(userInfo);
     } else {
         res.redirect(`/#${new URLSearchParams({
             error: 'playlists_not_fetched'

@@ -26,7 +26,7 @@ export default async function handler(req, res) {
             grant_type: 'authorization_code'
           },
           headers: {
-            'Authorization': 'Basic ' + (new Buffer(process.env.SPOTIFY_CLIENT_ID + ':' + process.env.SPOTIFY_CLIENT_SECRET).toString('base64'))
+            'Authorization': `Basic ${Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString('base64')}`
           },
           json: true
         };
@@ -53,6 +53,7 @@ export default async function handler(req, res) {
 
                         const cookies = new Cookies(req, res);
 
+                        // set the http cookie
                         cookies.set('songbind_spotify_auth', JSON.stringify({
                             access_token: access_token, 
                             refresh_token: refresh_token,

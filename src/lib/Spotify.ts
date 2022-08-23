@@ -1,22 +1,3 @@
-import SpotifyWebApi from 'spotify-web-api-node';
-const querystring = require('querystring');
-
-const client_id = process.env.SPOTIFY_CLIENT_ID;
-const client_secret = process.env.SPOTIFY_CLIENT_SECRET;
-const refresh_token = process.env.SPOTIFY_REFRESH_TOKEN;
-
-const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
-const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
-
-// export const scope = 'ugc-image-upload' //Images
-// + ' user-modify-playback-state user-read-playback-state user-read-currently-playing' //Spotify Connect
-// + ' user-follow-modify user-follow-read' //Follow
-// + ' user-read-recently-played user-read-playback-position user-top-read' //Listening History
-// + ' playlist-read-collaborative playlist-modify-public playlist-read-private playlist-modify-private' //Playlists
-// + ' app-remote-control streaming' //Playback
-// + ' user-read-email user-read-private' //Users
-// + ' user-library-modify user-library-read'; //Library
-
 export const scopes = [
     'ugc-image-upload',
     'user-modify-playback-state',
@@ -39,42 +20,95 @@ export const scopes = [
     'user-library-read'
 ].join(',');
 
-const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET
-});
-
-export default spotifyApi;
-
-
-const getAccessToken = async () => {
-  const response = await fetch(TOKEN_ENDPOINT, {
-    method: 'POST',
+const getData = async (url, access_token) => await fetch(url, {
+    method: 'GET',
     headers: {
-      Authorization: `Basic ${basic}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
+        'Authorization': `Bearer ${access_token}`,
+        'Content-type': 'application/json'
     },
-    body: querystring.stringify({
-      grant_type: 'refresh_token',
-      refresh_token
-    })
-  });
+}).then(res => res.json());
 
-  return response.json();
+const getToken = async () => {
+    const { access_token } = await fetch('/api/spotify/get/token', {method: 'GET'}).then(res => res.json());
+    return access_token;
 };
 
-const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
+export const getUserPlaylists = async () => {
+    const access_token = await getToken();
+    const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?offset=0&limit=1`;
+    const playlist = await getData(PLAYLISTS_ENDPOINT, access_token);
 
-export const getSpotifyTopTracks = async () => {
-  const { access_token } = await getAccessToken();
+    const playlistTotal = playlist.total;
+    const quotient = Math.floor(playlistTotal/50);
+    const remainder = playlistTotal % 50;
+    let playlists = [];
 
-  return fetch(TOP_TRACKS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`
-    }
-  });
-};
+    if(quotient > 0) {
+        var offset = "offset=0";
+        for(let i = 0; i < quotient; i++) {
+            const data = await getData(`https://api.spotify.com/v1/me/playlists?${offset}&limit=50`, access_token);
+            playlists = playlists.concat(data.items)
+            offset = `offset=${(i+1) * 50}`;
+        };
+        const data = await getData(`https://api.spotify.com/v1/me/playlists?${offset}&limit=${remainder}`, access_token);
+        playlists = playlists.concat(data.items)
+    } else {
+        const data = await getData(`https://api.spotify.com/v1/me/playlists?offset=0&limit=${remainder}`, access_token);
+        playlists = playlists.concat(data.items)
+    };
 
-export const getSpotifyPlaylists = async () => {
+    return playlists;
+}
+
+export const getSavedSongs = async () => {
+    const access_token = await getToken();
+    const SAVED_SONGS_ENDPOINT = `https://api.spotify.com/v1/me/tracks?offset=0&limit=1`;
+    const song = await getData(SAVED_SONGS_ENDPOINT, access_token);
+
+    const totalSongs = song.total;
+    const quotient = Math.floor(totalSongs/50);
+    const remainder = totalSongs % 50;
+    let songs = [];
+
+    if(quotient > 0) {
+        var offset = "offset=0";
+        for(let i = 0; i < quotient; i++) {
+            const data = await getData(`https://api.spotify.com/v1/me/tracks?${offset}&limit=50`, access_token);
+            songs = songs.concat(data.items);
+            offset = `offset=${(i+1) * 50}`;
+        };
+        const data = await getData(`https://api.spotify.com/v1/me/tracks?${offset}&limit=${remainder}`, access_token);
+        songs = songs.concat(data.items);
+    } else {
+        const data = await getData(`https://api.spotify.com/v1/me/tracks?offset=0&limit=${remainder}`, access_token);
+        songs = songs.concat(data.items);
+    };
+
+    return songs;
+}
+
+export const getFollowedArtists = async () => {
+    const access_token = await getToken();
+    const artist = await getData('https://api.spotify.com/v1/me/following?type=artist&limit=1', access_token);
     
+    var totalArtists = artist.artists.total;
+    var quotient = Math.floor(totalArtists/50);
+    var remainder = totalArtists % 50;
+    var artists = [];
+
+    if(quotient>0) {
+      var lastArtist = "";
+      for(let i = 0; i < quotient; i++) {
+        const data = await getData(`https://api.spotify.com/v1/me/following?type=artist&limit=50${lastArtist}`, access_token);
+        artists = artists.concat(data.artists.items);
+        lastArtist = "&after=" + data.artists.cursors.after;
+      };
+      const data = await getData(`https://api.spotify.com/v1/me/following?type=artist&limit=${remainder+lastArtist}`, access_token);
+      artists = artists.concat(data.artists.items);
+    } else {
+      const data = await getData(`https://api.spotify.com/v1/me/following?type=artist&limit=${remainder}`, access_token);
+      artists = artists.concat(data.artists.items);
+    };
+
+    return artists;
 }

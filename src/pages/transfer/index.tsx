@@ -10,6 +10,7 @@ import Load from '../../assets/webapp/transfer/load.svg';
 import Playlists from "../../assets/webapp/transfer/playlist.svg";
 import Songs from "../../assets/webapp/transfer/song.svg";
 import Artists from "../../assets/webapp/transfer/artist.svg";
+import { getFollowedArtists, getSavedSongs, getUserPlaylists } from "../../lib/Spotify";
 
 
 const TransferPage: NextPage = () => {
@@ -50,6 +51,8 @@ const Transfer = ({ platforms }) => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
+    console.log(data);
+
     useEffect(() => {
         setLoaded(false);
         setQuery({
@@ -84,9 +87,35 @@ const Transfer = ({ platforms }) => {
                 <div className="flex flex-col">
 
                     {loaded && data != undefined ? 
-                        data.map(content => {
-                            return <h3 key={content.id}> {content.name}</h3>
-                        })
+                        (() => {switch(query.content) {
+                            case 'playlists':
+                                return (
+                                    <div>
+                                        <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-between">
+                                            <div className="flex flex-row space-x-5">
+                                                <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                                <h1 className="font-bold pl-32 my-auto">Title</h1>
+                                            </div>
+                                            <h1 className="font-bold my-auto">Creator</h1>
+                                        </div>
+                                        <div className="flex flex-col space-y-5">
+                                            {data.map(playlist => {
+                                                return <Playlist 
+                                                            key={playlist.id}
+                                                            id={playlist.id}
+                                                            img={playlist.images[0].url} 
+                                                            name={playlist.name} 
+                                                            owner={playlist.owner.display_name} 
+                                                        />
+                                            })}
+                                        </div>
+                                    </div>
+                                );
+                            case 'songs':
+                                return data.map(({track}) => <h3 key={track.id}> {track.name}</h3>)
+                            case 'artists':
+                                return data.map(artist => <h3 key={artist.id}> {artist.name}</h3>);
+                        }})()
                         :
                         null
                     }
@@ -98,11 +127,21 @@ const Transfer = ({ platforms }) => {
     )
 }
 
+const Playlist = ({ img, name, owner, id }) => {
+    return (
+        <div className="flex flex-row space-x-5 justify-between px-5 py-2 mr-5 ml-2 ring-2 ring-gray-700 rounded-2xl">
+            <div className="flex flex-row space-x-5">
+                <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+                <img className="w-8 h-8" src={img} alt="" />
+                <h3 className="my-auto"> {name} </h3>
+            </div>
+            <h3 className="my-auto"> {owner} </h3>
+        </div>
+    )
+}
+
 const ImportButton = ({ query, setData }) => {
 
-    // const sendQuery = () => {
-        
-    // }
 
     return (
         <button onClick={() => {}} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-[rgba(242,201,76,1)]">
@@ -137,29 +176,33 @@ const LoadButton = ({ setLoaded, setData, setIsLoading, query }) => {
                     switch(query.platform.api) {
                         case 'youtube': break;
                         case 'spotify':
-                            dataQuery = await fetch('/api/spotify/get/playlists', { method: 'GET' });
+                            dataQuery = await getUserPlaylists();
                             break;
                     }
                     break;
                 case 'songs':
                     switch(query.platform.api) {
                         case 'youtube': break;
-                        case 'spotify': break;
+                        case 'spotify': 
+                            dataQuery = await getSavedSongs();
+                            break;
                     }
                     break;
                 case 'artists':
                     switch(query.platform.api) {
                         case 'youtube': break;
-                        case 'spotify': break;
+                        case 'spotify':
+                            dataQuery = await getFollowedArtists();
+                            break;
                     }
                     break;
             }
         } else {
 
         }
-        let data;
-        if(dataQuery !== undefined) data = await dataQuery.json();
-        setData(data);
+        // let data;
+        // if(dataQuery !== undefined) data = await dataQuery;
+        setData(dataQuery);
         setLoaded(true);
         setIsLoading(false);
     };
@@ -189,7 +232,7 @@ const ContentSelector = ({ setSelectedContent }) => {
     return (
         <div className="p-3 rounded-xl ring-2 ring-gray-800 flex flex-row font-bold">
             <Image className="my-auto" src={contentImg} width={"20"} height={"20"} priority />
-            <select onChange={handleChange} name="content" id="content">
+            <select className="cursor-pointer" onChange={handleChange} name="content" id="content">
                 <option value={'playlists'}> &nbsp; Playlists </option>
                 <option value={'songs'}> &nbsp; Liked songs </option>
                 <option value={'artists'}> &nbsp; Artists </option>
@@ -207,7 +250,7 @@ const PlatformSelector = ({ platforms, selectedPlatform, setSelectedPlatform }) 
     return (
         <div className="p-3 rounded-xl ring-2 ring-gray-800 flex flex-row font-bold">
             <Image className="my-auto" src={`/streamingPlatforms/${selectedPlatform.img}.png`} width={"25"} height={"25"} priority />
-            <select name="platform" id="platform" onChange={handleChange}>
+            <select className="cursor-pointer" name="platform" id="platform" onChange={handleChange}>
                 {platforms.map(platform => platform.connected ?
                     <option key={platform.name} value={JSON.stringify(platform)}>
                         {platform.name}
