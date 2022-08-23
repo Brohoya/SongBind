@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-var request = require('request');
 var Cookies = require('cookies');
+
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
     var protocol = 'https';
@@ -25,23 +24,8 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
                 method: 'POST',
                 body: JSON.stringify(userInfo)
             }).then(res => res.json());
-            cookies.set('songbind_spotify_auth', JSON.stringify(userInfo))
+            cookies.set('songbind_spotify_auth', JSON.stringify(userInfo), {path: '/', httpOnly: true})
         }
-
-        const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?offset=0&limit=1`;
-        const playlist = await fetch(PLAYLISTS_ENDPOINT, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${userInfo.access_token}`,
-                'Content-type': 'application/json'
-            },
-        }).then(res => res.json());
-
-        const playlistTotal = playlist.total;
-        const quotient = Math.floor(playlistTotal/50);
-        const remainder = playlistTotal % 50;
-        let playlists = [];
-        let data;
 
         const getData = async (url) => await fetch(url, {
             method: 'GET',
@@ -50,6 +34,15 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
                 'Content-type': 'application/json'
             },
         }).then(res => res.json());
+
+        const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?offset=0&limit=1`;
+        const playlist = await getData(PLAYLISTS_ENDPOINT);
+
+        const playlistTotal = playlist.total;
+        const quotient = Math.floor(playlistTotal/50);
+        const remainder = playlistTotal % 50;
+        let playlists = [];
+        let data;
 
         if(quotient > 0) {
             var offset = "offset=0";
@@ -65,9 +58,9 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
             playlists = playlists.concat(data.items)
         };
 
-        res.json(playlists);
+        res.status(200).json(playlists);
     } else {
-        res.redirect(`/transfer/#${new URLSearchParams({
+        res.redirect(`/#${new URLSearchParams({
             error: 'playlists_not_fetched'
         }).toString()}`);
     }
