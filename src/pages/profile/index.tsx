@@ -14,7 +14,7 @@ const UserProfilePage: NextPage = () => {
             <div  className="w-6/12 flex flex-col space-y-5 ring-2 ring-slate-700 rounded-3xl mx-auto my-20 content-center px-40 py-20">
                 <div className="flex flex-row">
                     <img className="w-8 h-8 my-auto mx-3 rounded-3xl" src={auth.user?.photoURL ? `${auth.user.photoURL}` : '/noProfilePic.png'} alt="img" referrerPolicy="no-referrer" />
-                    <h1 className="text-xl font-bold text-center my-auto">{auth.user?.displayName}'s profile page </h1>
+                    <h1 className="text-xl font-bold text-center my-auto">{auth.user?.displayName}&apos;s profile page </h1>
                 </div>
                 <br />
                 <br />
