@@ -5,9 +5,7 @@ import Image from "next/image";
 import Logout from '../../assets/webapp/profile/logout.svg';
 
 const UserProfilePage: NextPage = () => {
-    const {logout} = useAuth();
     const auth = useAuth();
-    console.log(auth);
 
     return (
         <main className="main">

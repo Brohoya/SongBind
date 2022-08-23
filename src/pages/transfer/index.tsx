@@ -75,7 +75,7 @@ const Transfer = ({ platforms }) => {
                 <PlatformSelector platforms={platforms} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform}  />
 
                 {!loaded ? 
-                    <LoadButton setLoaded={setLoaded} query={query} setData={setData} setIsLoading={setIsLoading} />
+                    <LoadButton setLoaded={setLoaded} query={query} setData={setData} setIsLoading={setIsLoading} isLoading={isLoading} />
                     :
                     toggleChecked ? <ImportButton query={query} setData={setData} /> : <ExportButton query={query} setData={setData} />
                 }
@@ -232,7 +232,7 @@ const ExportButton = ({ query, setData }) => {
     )
 }
 
-const LoadButton = ({ setLoaded, setData, setIsLoading, query }) => {
+const LoadButton = ({ setLoaded, setData, setIsLoading, query, isLoading }) => {
 
     const load = async () => {
         setIsLoading(true);
@@ -277,7 +277,7 @@ const LoadButton = ({ setLoaded, setData, setIsLoading, query }) => {
     return (
         <button onClick={load} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-gray-300">
             <div className="flex flex-row">
-                <Image src={Load} width='20' height='20' priority />
+                <Image className={isLoading ? 'animate-spin' : null} src={Load} width='20' height='20' priority />
                 <h3 className="text-lg font-bold"> &nbsp; Load</h3>
             </div>
         </button>

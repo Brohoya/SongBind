@@ -29,7 +29,7 @@ const getData = async (url, access_token) => await fetch(url, {
 }).then(res => res.json());
 
 const getToken = async () => {
-    const { access_token } = await fetch('/api/spotify/get/token', {method: 'GET'}).then(res => res.json());
+    const { access_token } = await fetch('/api/spotify/getToken', {method: 'GET'}).then(res => res.json());
     return access_token;
 };
 

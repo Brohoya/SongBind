@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getSavedSongs } from "../../../../lib/Spotify";
 var Cookies = require('cookies');
 
 
@@ -33,7 +32,7 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
         res.status(200).json(userInfo);
     } else {
         res.redirect(`/#${new URLSearchParams({
-            error: 'playlists_not_fetched'
+            error: 'forbidden_request_origin'
         }).toString()}`);
     }
 }
