@@ -11,7 +11,7 @@ export default function LoginPage() {
     return (
         <main className="main">
             <div  className="w-6/12 flex flex-col space-y-5 ring-2 ring-slate-700 rounded-3xl mx-auto my-20 content-center px-40 py-20">
-                <h1 className="text-xl font-bold">Sign up or Login :</h1>
+                <h1 className="text-xl font-bold text-center">Login :</h1>
                 <div className="flex flex-col space-y-3 w-8/12 mx-auto">
                     <GoogleSignInButton />
                 </div>

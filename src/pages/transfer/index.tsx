@@ -51,7 +51,7 @@ const Transfer = ({ platforms }) => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log(data);
+    // console.log(data);
 
     useEffect(() => {
         setLoaded(false);
@@ -82,15 +82,17 @@ const Transfer = ({ platforms }) => {
 
             </div>
             <div className="mt-5 overflow-auto">
+
                 <Loader show={isLoading} />
-                {/* <h1> {platforms.length} platforms connected: music transfer component rendered </h1> */}
+
                 <div className="flex flex-col">
+
 
                     {loaded && data != undefined ? 
                         (() => {switch(query.content) {
                             case 'playlists':
                                 return (
-                                    <div>
+                                    <>
                                         <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-between">
                                             <div className="flex flex-row space-x-5">
                                                 <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
@@ -99,22 +101,60 @@ const Transfer = ({ platforms }) => {
                                             <h1 className="font-bold my-auto">Creator</h1>
                                         </div>
                                         <div className="flex flex-col space-y-5">
-                                            {data.map(playlist => {
-                                                return <Playlist 
-                                                            key={playlist.id}
-                                                            id={playlist.id}
-                                                            img={playlist.images[0].url} 
-                                                            name={playlist.name} 
-                                                            owner={playlist.owner.display_name} 
-                                                        />
-                                            })}
+                                            {data.map(playlist => 
+                                                <Playlist 
+                                                    key={playlist.id} 
+                                                    id={playlist.id} img={playlist.images[0].url} 
+                                                    name={playlist.name} 
+                                                    owner={playlist.owner.display_name} 
+                                                />
+                                            )}
                                         </div>
-                                    </div>
+                                    </>
                                 );
                             case 'songs':
-                                return data.map(({track}) => <h3 key={track.id}> {track.name}</h3>)
+                                return (
+                                    <>
+                                        <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-between">
+                                            <div className="flex flex-row space-x-5">
+                                                <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                                <h1 className="font-bold pl-32 my-auto">Title</h1>
+                                            </div>
+                                            <h1 className="font-bold my-auto">Duration</h1>
+                                        </div>
+                                        <div className="flex flex-col space-y-5">
+                                            {data.map(({track}) => 
+                                                <Track 
+                                                    key={track.id}
+                                                    id={track.id} img={track.album.images[0].url} 
+                                                    name={track.name}
+                                                    duration={track.duration_ms} 
+                                                />
+                                            )}
+                                        </div>
+                                    </>
+                                );
                             case 'artists':
-                                return data.map(artist => <h3 key={artist.id}> {artist.name}</h3>);
+                                return (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-5 px-5 py-2 mr-5 ml-2 mb-5">
+                                            <div className="flex flex-row space-x-5">
+                                                <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                                <h1 className="font-bold pl-32 my-auto">Name</h1>
+                                            </div>
+                                            <h1 className="font-bold pl-48 my-auto">Name</h1>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-5">
+                                            {data.map((artist) => 
+                                                <Artist 
+                                                    key={artist.id}
+                                                    id={artist.id} img={artist.images[0].url} 
+                                                    name={artist.name}
+                                                />
+                                            )}
+                                        </div>
+                                    </>
+                                );
                         }})()
                         :
                         null
@@ -136,6 +176,33 @@ const Playlist = ({ img, name, owner, id }) => {
                 <h3 className="my-auto"> {name} </h3>
             </div>
             <h3 className="my-auto"> {owner} </h3>
+        </div>
+    )
+}
+
+const Track = ({ img, name, duration, id }) => {
+    const min = (duration/1000/60).toFixed(0);
+    let sec = (duration/1000%60).toFixed(0);
+    sec = sec.length === 1 ? '0' + sec : sec;
+
+    return (
+        <div className="flex flex-row space-x-5 justify-between px-5 py-2 mr-5 ml-2 ring-2 ring-gray-700 rounded-2xl">
+            <div className="flex flex-row space-x-5">
+                <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+                <img className="w-8 h-8" src={img} alt="" />
+                <h3 className="my-auto"> {name} </h3>
+            </div>
+            <h3 className="my-auto"> {`${min}:${sec}`} </h3>
+        </div>
+    )
+}
+
+const Artist = ({ img, name, id }) => {
+    return (
+        <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 ring-2 ring-gray-700 rounded-2xl">
+            <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+            <img className="w-8 h-8" src={img} alt="" />
+            <h3 className="my-auto"> {name} </h3>
         </div>
     )
 }
