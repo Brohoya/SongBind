@@ -51,7 +51,7 @@ const Transfer = ({ platforms }) => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // console.log(data);
+    console.log(data);
 
     useEffect(() => {
         setLoaded(false);
@@ -277,7 +277,9 @@ const LoadButton = ({ setLoaded, setData, setIsLoading, query, isLoading }) => {
     return (
         <button onClick={load} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-gray-300">
             <div className="flex flex-row">
-                <Image className={isLoading ? 'animate-spin' : null} src={Load} width='20' height='20' priority />
+                <div className={`${isLoading ? 'animate-spin' : null} flex my-auto`}>
+                    <Image className={`scale-x-[-1]`} src={Load} width='20' height='20' priority />
+                </div>
                 <h3 className="text-lg font-bold"> &nbsp; Load</h3>
             </div>
         </button>

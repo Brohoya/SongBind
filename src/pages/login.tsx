@@ -9,7 +9,7 @@ export default function LoginPage() {
     if(auth.user) router.push('/dashboard');
 
     return (
-        <main className="main">
+        <main className="login-page">
             <div  className="w-6/12 flex flex-col space-y-5 ring-2 ring-slate-700 rounded-3xl mx-auto my-20 content-center px-40 py-20">
                 <h1 className="text-xl font-bold text-center">Login :</h1>
                 <div className="flex flex-col space-y-3 w-8/12 mx-auto">

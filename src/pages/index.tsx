@@ -12,14 +12,14 @@ const Home: NextPage = () => {
   const auth = useAuth();
 
   return (
-    <div className='landing-page bg-yellow-100/10'>
+    <main className='landing-page bg-yellow-100/10'>
       <Head>
         <title>SongBind</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className='w-10/12 mx-auto'>
-        <nav className='navbar mt-2 bg-white shadow-md shadow-[rgba(0,0,0,0.35)] rounded-3xl'>
+      <div className='w-10/12 mx-auto'>
+        <nav className='navbar mt-5 bg-white shadow-md shadow-[rgba(0,0,0,0.35)] rounded-3xl'>
           <ul className='flex flex-row w-full justify-between p-4 my-auto'>
             <li className='my-auto'>
               <div className="flex flex-row cursor-pointer">
@@ -98,17 +98,7 @@ const Home: NextPage = () => {
             </div>
           </div>
         </div>
-        {/* {user ? (
-            <Link href="/dashboard">
-              <button>Open SongBind</button>
-            </Link>
-          ) : (
-            <Link href="/login">
-              <button>Login</button>
-            </Link>
-          )
-        } */}
-      </main>
+      </div>
 
       <footer className=''>
         {/* <a
@@ -122,7 +112,7 @@ const Home: NextPage = () => {
           </span>
         </a> */}
       </footer>
-    </div>
+    </main>
   )
 }
 

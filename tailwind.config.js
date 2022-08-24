@@ -2,7 +2,7 @@ const colors = require('tailwindcss/colors');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./src/**/*.{js,jsx,ts,tsx,svg}"],
   // , "./public/index.html", './next.config.js'
   darkMode: 'class',
   theme: {
@@ -10,7 +10,7 @@ module.exports = {
       gray: {
         900: '#000000',
         800: '#333333',
-        700: '#4F4F4F',
+        700: 'rgb(var(--color-gray) / <alpha-value>)',
         600: '#828282',
         400: '#E0E0E0',
         // 300: '#e3e5e8',

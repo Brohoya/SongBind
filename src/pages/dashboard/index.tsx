@@ -4,9 +4,9 @@ import { UseProtectedRoute } from "../../components/Routing";
 const Dashboard: NextPage = () => {
 
     return (
-        <main className="app">
+        <div className="app">
             <h1>Dashboard component</h1>
-        </main>
+        </div>
     );
 }
 

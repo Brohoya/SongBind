@@ -23,7 +23,7 @@ export default function AppLayout({ children }: AppLayout): JSX.Element {
                 <main>
                     <Navbar />
                     <Sidebar/>
-                    <div> { children } </div>
+                    <> { children } </>
                 </main>
             </PlatformsProvider>
         )

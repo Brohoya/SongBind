@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Bars } from "react-loader-spinner";
+import React from "react";
 
 // Import SVGs
 import Logo from "../assets/webapp/sidebar/logo.svg";
@@ -9,6 +10,7 @@ import Transfer from "../assets/webapp/sidebar/transfer.svg";
 import Explore from "../assets/webapp/sidebar/explore.svg";
 import Library from "../assets/webapp/sidebar/library.svg";
 import Dashboard from "../assets/webapp/sidebar/dashboard.svg";
+import dashboard from "../assets/webapp/sidebar/dashboard.svg";
 import getActivePage from "../hooks/useActivePage";
 import usePlatforms, { IPlatforms } from "../hooks/usePlatforms";
 
@@ -79,12 +81,13 @@ export default function Sidebar(): JSX.Element {
 
 const SidebarItem = ({ title, img, pageName }: {title: string, img: string, pageName: string }): JSX.Element => {
     const activePage = getActivePage();
+    // console.log(dashboard);
 
     return (
         <li>
             <Link href={`/${pageName}`}>
-                <button onClick={() => {/*setActivePage(title)*/}} className={`${activePage===title ? 'bg-[rgba(242,201,76,1)]' : 'bg-transparent'} sidebarItem`}>
-                    <Image className="my-auto fill-gray-200 stroke-gray-200" src={img} width={"25"} height={"25"} priority />
+                <button className={`${activePage===title ? 'bg-[rgba(242,201,76,1)]' : 'bg-transparent'} sidebarItem`}>
+                    <Image className="my-auto fill-pink-500" src={img} width={"25"} height={"25"} priority />
                     &nbsp; {title}
                 </button>
             </Link>
