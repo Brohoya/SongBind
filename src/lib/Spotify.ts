@@ -33,7 +33,7 @@ const getToken = async () => {
     return access_token;
 };
 
-export const getUserPlaylists = async () => {
+export const getUserPlaylistsSpotify = async () => {
     const access_token = await getToken();
     const PLAYLISTS_ENDPOINT = `https://api.spotify.com/v1/me/playlists?offset=0&limit=1`;
     const playlist = await getData(PLAYLISTS_ENDPOINT, access_token);
@@ -60,7 +60,7 @@ export const getUserPlaylists = async () => {
     return playlists;
 }
 
-export const getSavedSongs = async () => {
+export const getSavedSongsSpotify = async () => {
     const access_token = await getToken();
     const SAVED_SONGS_ENDPOINT = `https://api.spotify.com/v1/me/tracks?offset=0&limit=1`;
     const song = await getData(SAVED_SONGS_ENDPOINT, access_token);
@@ -87,7 +87,7 @@ export const getSavedSongs = async () => {
     return songs;
 }
 
-export const getFollowedArtists = async () => {
+export const getFollowedArtistsSpotify = async () => {
     const access_token = await getToken();
     const artist = await getData('https://api.spotify.com/v1/me/following?type=artist&limit=1', access_token);
     

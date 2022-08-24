@@ -3,6 +3,10 @@ import { useEffect, useState } from "react";
 import { Bars } from "react-loader-spinner";
 import { UseProtectedRoute } from "../../components/Routing";
 import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
+import { getFollowedArtistsSpotify, getSavedSongsSpotify, getUserPlaylistsSpotify } from "../../lib/Spotify";
+import useAuth from "../../hooks/useAuth";
+import { importArtistsSpotify, importPlaylistsSpotify, importSongsSpotify } from "../../lib/Firebase";
+
 import Image from "next/image";
 import Import from '../../assets/webapp/transfer/import.svg';
 import Export from '../../assets/webapp/transfer/export.svg';
@@ -10,7 +14,7 @@ import Load from '../../assets/webapp/transfer/load.svg';
 import Playlists from "../../assets/webapp/transfer/playlist.svg";
 import Songs from "../../assets/webapp/transfer/song.svg";
 import Artists from "../../assets/webapp/transfer/artist.svg";
-import { getFollowedArtists, getSavedSongs, getUserPlaylists } from "../../lib/Spotify";
+
 
 
 const TransferPage: NextPage = () => {
@@ -77,7 +81,7 @@ const Transfer = ({ platforms }) => {
                 {!loaded ? 
                     <LoadButton setLoaded={setLoaded} query={query} setData={setData} setIsLoading={setIsLoading} isLoading={isLoading} />
                     :
-                    toggleChecked ? <ImportButton query={query} setData={setData} /> : <ExportButton query={query} setData={setData} />
+                    toggleChecked ? <ImportButton query={query} data={data} /> : <ExportButton query={query} data={data} />
                 }
 
             </div>
@@ -100,7 +104,7 @@ const Transfer = ({ platforms }) => {
                                             </div>
                                             <h1 className="font-bold my-auto">Creator</h1>
                                         </div>
-                                        <div className="flex flex-col space-y-5">
+                                        <div className="flex flex-col space-y-3">
                                             {data.map(playlist => 
                                                 <Playlist 
                                                     key={playlist.id} 
@@ -115,19 +119,21 @@ const Transfer = ({ platforms }) => {
                             case 'songs':
                                 return (
                                     <>
-                                        <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-between">
-                                            <div className="flex flex-row space-x-5">
-                                                <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
-                                                <h1 className="font-bold pl-32 my-auto">Title</h1>
+                                        <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 mb-5 justify-start">
+                                            <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                            <div className="grid grid-cols-4 gap-5 w-full">
+                                                <h1 className="font-bold my-auto col-span-2 text-center">Title</h1>
+                                                <h1 className="font-bold my-auto text-center">Artist/Group</h1>
+                                                <h1 className="font-bold my-auto text-center">Duration</h1>
                                             </div>
-                                            <h1 className="font-bold my-auto">Duration</h1>
                                         </div>
-                                        <div className="flex flex-col space-y-5">
+                                        <div className="flex flex-col space-y-3">
                                             {data.map(({track}) => 
                                                 <Track 
                                                     key={track.id}
                                                     id={track.id} img={track.album.images[0].url} 
                                                     name={track.name}
+                                                    artist={track.artists[0].name}
                                                     duration={track.duration_ms} 
                                                 />
                                             )}
@@ -137,14 +143,22 @@ const Transfer = ({ platforms }) => {
                             case 'artists':
                                 return (
                                     <>
-                                        <div className="grid grid-cols-2 gap-5 px-5 py-2 mr-5 ml-2 mb-5">
-                                            <div className="flex flex-row space-x-5">
-                                                <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
-                                                <h1 className="font-bold pl-32 my-auto">Name</h1>
+                                        <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-start">
+                                            <input className="my-auto" type="checkbox" name="artists" id="artists" />
+                                            <div className="grid grid-cols-2 gap-3 w-full">
+                                                <h1 className="font-bold my-auto text-center">Name</h1>
+                                                <h1 className="font-bold my-auto text-center">Name</h1>
                                             </div>
-                                            <h1 className="font-bold pl-48 my-auto">Name</h1>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-5">
+                                        {/* <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 mb-5 justify-start">
+                                            <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                            <div className="grid grid-cols-4 gap-5 w-full">
+                                                <h1 className="font-bold my-auto col-span-2 text-center">Title</h1>
+                                                <h1 className="font-bold my-auto text-center">Artist/Group</h1>
+                                                <h1 className="font-bold my-auto text-center">Duration</h1>
+                                            </div>
+                                        </div> */}
+                                        <div className="grid grid-cols-2 gap-3">
                                             {data.map((artist) => 
                                                 <Artist 
                                                     key={artist.id}
@@ -169,7 +183,7 @@ const Transfer = ({ platforms }) => {
 
 const Playlist = ({ img, name, owner, id }) => {
     return (
-        <div className="flex flex-row space-x-5 justify-between px-5 py-2 mr-5 ml-2 ring-2 ring-gray-700 rounded-2xl">
+        <div className="flex flex-row space-x-5 justify-between px-5 py-2 mr-5 ml-2 ring-2 ring-[rgba(79,79,79,1)] rounded-2xl">
             <div className="flex flex-row space-x-5">
                 <input className="my-auto" type="checkbox" name="playlist" id={id}/>
                 <img className="w-8 h-8" src={img} alt="" />
@@ -180,26 +194,29 @@ const Playlist = ({ img, name, owner, id }) => {
     )
 }
 
-const Track = ({ img, name, duration, id }) => {
+const Track = ({ img, name, artist, duration, id }) => {
     const min = (duration/1000/60).toFixed(0);
     let sec = (duration/1000%60).toFixed(0);
     sec = sec.length === 1 ? '0' + sec : sec;
 
     return (
-        <div className="flex flex-row space-x-5 justify-between px-5 py-2 mr-5 ml-2 ring-2 ring-gray-700 rounded-2xl">
-            <div className="flex flex-row space-x-5">
-                <input className="my-auto" type="checkbox" name="playlist" id={id}/>
-                <img className="w-8 h-8" src={img} alt="" />
-                <h3 className="my-auto"> {name} </h3>
+        <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 ring-2 ring-inset ring-[rgba(79,79,79,1)] rounded-2xl">
+            <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+            <div className="grid grid-cols-4 gap-5 w-full ">
+                <div className="col-span-2 flex flex-row space-x-3">
+                    <img className="w-8 h-8" src={img} alt="" />
+                    <h3 className="my-auto"> {name} </h3>
+                </div>
+                <h3 className="my-auto text-center"> {artist} </h3>
+                <h3 className="my-auto text-center"> {`${min}:${sec}`} </h3>
             </div>
-            <h3 className="my-auto"> {`${min}:${sec}`} </h3>
         </div>
     )
 }
 
 const Artist = ({ img, name, id }) => {
     return (
-        <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 ring-2 ring-gray-700 rounded-2xl">
+        <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 ring-2 ring-[rgba(79,79,79,1)] rounded-2xl">
             <input className="my-auto" type="checkbox" name="playlist" id={id}/>
             <img className="w-8 h-8" src={img} alt="" />
             <h3 className="my-auto"> {name} </h3>
@@ -207,11 +224,40 @@ const Artist = ({ img, name, id }) => {
     )
 }
 
-const ImportButton = ({ query, setData }) => {
+const ImportButton = ({ query, data }) => {
 
+    const { user } = useAuth();
+
+    const importDB = async () => {
+        let progress;
+        switch (query.content) {
+            case 'playlists':
+                switch(query.platform.api) {
+                    case 'youtube': break;
+                    case 'spotify': break;
+                        // progress = await importPlaylistsSpotify(data, user);
+                        // break;
+                } break;
+            case 'songs':
+                switch(query.platform.api) {
+                    case 'youtube': break;
+                    case 'spotify': break;
+                        // progress = await importSongsSpotify(data, user);
+                        // break;
+                } break;
+            case 'artists':
+                switch(query.platform.api) {
+                    case 'youtube': break;
+                    case 'spotify': break;
+                        // progress = await importArtistsSpotify(data, user);
+                        // break;
+                } break;
+        };
+
+    }
 
     return (
-        <button onClick={() => {}} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-[rgba(242,201,76,1)]">
+        <button onClick={importDB} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-[rgba(242,201,76,1)]">
             <div className="flex flex-row">
                 <Image src={Import} width='20' height='20' priority />
                 <h3 className="text-lg font-bold"> &nbsp; Import</h3>
@@ -220,7 +266,7 @@ const ImportButton = ({ query, setData }) => {
     )
 }
 
-const ExportButton = ({ query, setData }) => {
+const ExportButton = ({ query, data }) => {
 
     return (
         <button onClick={() => {}} className="ring-4 ring-gray-800 rounded-2xl px-4 bg-[rgba(242,201,76,1)]">
@@ -236,40 +282,30 @@ const LoadButton = ({ setLoaded, setData, setIsLoading, query, isLoading }) => {
 
     const load = async () => {
         setIsLoading(true);
-        let dataQuery;
+        let data;
         if(query.direction === 'import') {
             switch (query.content) {
                 case 'playlists':
                     switch(query.platform.api) {
                         case 'youtube': break;
-                        case 'spotify':
-                            dataQuery = await getUserPlaylists();
-                            break;
-                    }
-                    break;
+                        case 'spotify': data = await getUserPlaylistsSpotify(); break;
+                    } break;
                 case 'songs':
                     switch(query.platform.api) {
                         case 'youtube': break;
-                        case 'spotify': 
-                            dataQuery = await getSavedSongs();
-                            break;
-                    }
-                    break;
+                        case 'spotify': data = await getSavedSongsSpotify(); break;
+                    } break;
                 case 'artists':
                     switch(query.platform.api) {
                         case 'youtube': break;
-                        case 'spotify':
-                            dataQuery = await getFollowedArtists();
-                            break;
-                    }
-                    break;
+                        case 'spotify': data = await getFollowedArtistsSpotify(); break;
+                    } break;
             }
         } else {
 
         }
-        // let data;
-        // if(dataQuery !== undefined) data = await dataQuery;
-        setData(dataQuery);
+        
+        setData(data);
         setLoaded(true);
         setIsLoading(false);
     };

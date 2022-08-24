@@ -1,6 +1,5 @@
 import { getApps, initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { DocumentSnapshot } from "firebase/firestore";
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -21,21 +20,4 @@ if(!getApps.length) {
     }
   }
 }
-  
-/**
- * Convert a firestore document to JSON
- */
-  
-export function postToJSON(doc: DocumentSnapshot) {
-  const data = doc.data();
-  return {
-      ...data,
-      // Firestore timestamp not serializable to JSON
-      createdAt: data?.createdAt.toMillis(),
-      updatedAt: data?.updatedAt.toMillis(),
-  }
-}
-
-
-  
 

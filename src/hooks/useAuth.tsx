@@ -1,11 +1,15 @@
-import { User } from "firebase/auth";
+import { createContext, Dispatch, SetStateAction, useContext, useState } from "react";
 import { useRouter } from "next/router";
-import { createContext, useContext, useState } from "react";
+import { User } from "firebase/auth";
 import AuthService from "../lib/AuthService";
 
-interface IUserContext {
-    user: User | undefined | null;
-    error: null;
+type IAuthContext = {
+    user: User;
+    error: string;
+    loginWithGoogle: Function;
+    loginWithGithub: Function;
+    logout: Function;
+    setUser: Dispatch<SetStateAction<User>>;
 }
 
 const authContext = createContext(null);
@@ -15,7 +19,7 @@ export default function useAuth() {
 }
 
 export function AuthProvider(props) {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User>(null);
 	const [error, setError] = useState("");
 	const router = useRouter()
 
@@ -38,7 +42,7 @@ export function AuthProvider(props) {
 		setUser(null);
 		router.push('/');
 	};
-	const value = { user, error, loginWithGoogle, loginWithGithub, logout, setUser };
+	const value: IAuthContext = { user, error, loginWithGoogle, loginWithGithub, logout, setUser };
 
 	return <authContext.Provider value={value} {...props} />;
 }
