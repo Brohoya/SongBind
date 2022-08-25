@@ -35,12 +35,12 @@ class AuthService {
         if(!docExists) {
         try{
             const userDoc = await setDoc(doc(getFirestore(), "users", user.uid), {
-            displayName: user.displayName,
-            username: user.displayName,
-            photoURL: user.photoURL,
-            email: user.email,
-            uid: user.uid,
-            connectedPlatforms: {},
+                displayName: user.displayName,
+                username: user.displayName,
+                photoURL: user.photoURL,
+                email: user.email,
+                uid: user.uid,
+                connectedPlatforms: {},
             });
             console.log("User document created with ID: ", user.uid);
         } catch(e) {

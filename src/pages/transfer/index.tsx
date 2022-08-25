@@ -55,7 +55,7 @@ const Transfer = ({ platforms }) => {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    console.log(data);
+    // console.log(data);
 
     useEffect(() => {
         setLoaded(false);
@@ -65,6 +65,18 @@ const Transfer = ({ platforms }) => {
             content: selectedContent
         });
     }, [toggleChecked, selectedPlatform, selectedContent]);
+
+    const checkAll = () => {
+        let inputs = document.getElementsByName('data');
+        let ids = Array.from(inputs) as HTMLInputElement[];
+        ids.map(id => id.type === 'checkbox' ? id.checked = true : null);
+    }
+
+    const unCheckAll = () => {
+        let inputs = document.getElementsByName('data');
+        let ids = Array.from(inputs) as HTMLInputElement[];
+        ids.map(id => id.type === 'checkbox' ? id.checked = false : null);
+    }
 
     return (
         <div className="flex flex-col p-5 ring-2 ring-gray-700 rounded-3xl h-full">
@@ -76,7 +88,7 @@ const Transfer = ({ platforms }) => {
 
                 <h3 className="text-lg font-bold my-auto">{toggleChecked ? ' from ' : ' to '}</h3>
 
-                <PlatformSelector platforms={platforms} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform}  />
+                <PlatformSelector platforms={platforms} selectedPlatform={selectedPlatform} setSelectedPlatform={setSelectedPlatform} toggleChecked={toggleChecked} />
 
                 {!loaded ? 
                     <LoadButton setLoaded={setLoaded} query={query} setData={setData} setIsLoading={setIsLoading} isLoading={isLoading} />
@@ -99,7 +111,11 @@ const Transfer = ({ platforms }) => {
                                     <>
                                         <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-between">
                                             <div className="flex flex-row space-x-5">
-                                                <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                                <input onChange={ (e) => {
+                                                        if(e.target.checked) checkAll();
+                                                        else unCheckAll();
+                                                    }
+                                                } className="my-auto" type="checkbox" name="playlists" id="playlists" />
                                                 <h1 className="font-bold pl-32 my-auto">Title</h1>
                                             </div>
                                             <h1 className="font-bold my-auto">Creator</h1>
@@ -107,8 +123,8 @@ const Transfer = ({ platforms }) => {
                                         <div className="flex flex-col space-y-3">
                                             {data.map(playlist => 
                                                 <Playlist 
-                                                    key={playlist.id} 
-                                                    id={playlist.id} img={playlist.images[0].url} 
+                                                    key={playlist.id} id={playlist.id} 
+                                                    img={playlist.images[0].url} 
                                                     name={playlist.name} 
                                                     owner={playlist.owner.display_name} 
                                                 />
@@ -120,7 +136,11 @@ const Transfer = ({ platforms }) => {
                                 return (
                                     <>
                                         <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 mb-5 justify-start">
-                                            <input className="my-auto" type="checkbox" name="playlists" id="playlists" />
+                                            <input onChange={ (e) => {
+                                                        if(e.target.checked) checkAll();
+                                                        else unCheckAll();
+                                                    }
+                                                } className="my-auto" type="checkbox" name="playlists" id="playlists" />
                                             <div className="grid grid-cols-4 gap-5 w-full">
                                                 <h1 className="font-bold my-auto col-span-2 text-center">Title</h1>
                                                 <h1 className="font-bold my-auto text-center">Artist/Group</h1>
@@ -130,8 +150,8 @@ const Transfer = ({ platforms }) => {
                                         <div className="flex flex-col space-y-3">
                                             {data.map(({track}) => 
                                                 <Track 
-                                                    key={track.id}
-                                                    id={track.id} img={track.album.images[0].url} 
+                                                    key={track.id} id={track.id} 
+                                                    img={track.album.images[0].url} 
                                                     name={track.name}
                                                     artist={track.artists[0].name}
                                                     duration={track.duration_ms} 
@@ -144,7 +164,11 @@ const Transfer = ({ platforms }) => {
                                 return (
                                     <>
                                         <div className="flex flex-row px-5 py-2 mr-5 ml-2 mb-5 justify-start">
-                                            <input className="my-auto" type="checkbox" name="artists" id="artists" />
+                                            <input onChange={ (e) => {
+                                                        if(e.target.checked) checkAll();
+                                                        else unCheckAll();
+                                                    }
+                                                } className="my-auto" type="checkbox" name="artists" id="artists" />
                                             <div className="grid grid-cols-2 gap-3 w-full">
                                                 <h1 className="font-bold my-auto text-center">Name</h1>
                                                 <h1 className="font-bold my-auto text-center">Name</h1>
@@ -161,8 +185,8 @@ const Transfer = ({ platforms }) => {
                                         <div className="grid grid-cols-2 gap-3">
                                             {data.map((artist) => 
                                                 <Artist 
-                                                    key={artist.id}
-                                                    id={artist.id} img={artist.images[0].url} 
+                                                    key={artist.id} id={artist.id} 
+                                                    img={artist.images[0].url} 
                                                     name={artist.name}
                                                 />
                                             )}
@@ -185,7 +209,7 @@ const Playlist = ({ img, name, owner, id }) => {
     return (
         <div className="flex flex-row space-x-5 justify-between px-5 py-2 mr-5 ml-2 ring-2 ring-[rgba(79,79,79,1)] rounded-2xl">
             <div className="flex flex-row space-x-5">
-                <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+                <input className="my-auto" type="checkbox" name="data" value={id}/>
                 <img className="w-8 h-8" src={img} alt="" />
                 <h3 className="my-auto"> {name} </h3>
             </div>
@@ -201,7 +225,7 @@ const Track = ({ img, name, artist, duration, id }) => {
 
     return (
         <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 ring-2 ring-inset ring-[rgba(79,79,79,1)] rounded-2xl">
-            <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+            <input className="my-auto" type="checkbox" name="data" value={id}/>
             <div className="grid grid-cols-4 gap-5 w-full ">
                 <div className="col-span-2 flex flex-row space-x-3">
                     <img className="w-8 h-8" src={img} alt="" />
@@ -217,7 +241,7 @@ const Track = ({ img, name, artist, duration, id }) => {
 const Artist = ({ img, name, id }) => {
     return (
         <div className="flex flex-row space-x-5 px-5 py-2 mr-5 ml-2 ring-2 ring-[rgba(79,79,79,1)] rounded-2xl">
-            <input className="my-auto" type="checkbox" name="playlist" id={id}/>
+            <input className="my-auto" type="checkbox" name="data" value={id}/>
             <img className="w-8 h-8" src={img} alt="" />
             <h3 className="my-auto"> {name} </h3>
         </div>
@@ -229,28 +253,37 @@ const ImportButton = ({ query, data }) => {
     const { user } = useAuth();
 
     const importDB = async () => {
+
+        let allInputs = Array.from(document.getElementsByName('data')) as HTMLInputElement[];
+        let allCheckboxes = allInputs.filter(input => input.type === 'checkbox');
+        // console.log('CHECKBOXES', allCheckboxes);
+        // console.log('DATA', data);
+
+        let importData = []
+        for (let i = 0; i < allCheckboxes.length; i++) {
+            if(allCheckboxes[i].checked) {
+                importData.push(data[i])
+            }
+        };
+
+        console.log('IMPORTED DATA', importData);
+
         let progress;
         switch (query.content) {
             case 'playlists':
                 switch(query.platform.api) {
                     case 'youtube': break;
-                    case 'spotify': break;
-                        // progress = await importPlaylistsSpotify(data, user);
-                        // break;
+                    case 'spotify': importPlaylistsSpotify(importData, user); break;
                 } break;
             case 'songs':
                 switch(query.platform.api) {
                     case 'youtube': break;
-                    case 'spotify': break;
-                        // progress = await importSongsSpotify(data, user);
-                        // break;
+                    case 'spotify': importSongsSpotify(importData, user); break;
                 } break;
             case 'artists':
                 switch(query.platform.api) {
                     case 'youtube': break;
-                    case 'spotify': break;
-                        // progress = await importArtistsSpotify(data, user);
-                        // break;
+                    case 'spotify': importArtistsSpotify(importData, user); break;
                 } break;
         };
 
@@ -346,7 +379,7 @@ const ContentSelector = ({ setSelectedContent }) => {
     )
 }
 
-const PlatformSelector = ({ platforms, selectedPlatform, setSelectedPlatform }) => {
+const PlatformSelector = ({ platforms, selectedPlatform, setSelectedPlatform, toggleChecked }) => {
 
     const handleChange = (e) => {
         setSelectedPlatform(JSON.parse(e.target.value));
@@ -363,6 +396,7 @@ const PlatformSelector = ({ platforms, selectedPlatform, setSelectedPlatform }) 
                     :
                     null
                 )}
+                <option value={JSON.stringify({name: 'file', img: 'json'})}> File </option>
             </select>
         </div>
     )
