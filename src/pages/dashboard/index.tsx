@@ -16,9 +16,13 @@ const Dashboard: NextPage = () => {
                 <div className="w-full font-bold text-2xl flex flex-row space-x-5 my-auto">
                     <h1 className="my-auto">Platforms : </h1>
                     <ul className="flex flex-row space-x-5 m-0">
-                        {Object.values(platforms).map(platform => {
+                    {isLoading ?
+                        <></>
+                        :
+                        Object.values(platforms).map(platform => {
                             if(platform.connected) return <Platform key={platform.name} platform={platform} />
-                        })}
+                        })
+                    }
                     </ul>
                 </div>
 
