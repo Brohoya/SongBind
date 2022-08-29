@@ -15,6 +15,7 @@ import Load from '../../assets/webapp/transfer/load.svg';
 import Playlists from "../../assets/webapp/transfer/playlist.svg";
 import Songs from "../../assets/webapp/transfer/song.svg";
 import Artists from "../../assets/webapp/transfer/artist.svg";
+import Loader from "../../components/Loader";
 
 
 
@@ -417,22 +418,6 @@ const Toggle = ({ checked, setChecked }) => {
     )
 }
 
-
-const Loader = ({ show }) => {
-    return show ? (
-        <div className="flex mx-auto justify-center mt-20">
-            <Bars
-                height="80"
-                width="80"
-                color="#333333"
-                ariaLabel="bars-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-            />
-        </div>
-    ) : null;
-}
 
 const Transfering = ({ show, progress }) => {
     return show ? (
