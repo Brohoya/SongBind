@@ -21,7 +21,8 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
         var userInfo = JSON.parse(cookies.get('songbind_spotify_auth'));
 
         // Refresh the token if expired
-        if(userInfo.expiration_date <= Date.now()) {
+        // if(userInfo.expiration_date <= Date.now()) {
+        if(true) {
             userInfo = await fetch(`${protocol}://${host}/api/spotify/refresh_token`, {
                 method: 'POST',
                 body: JSON.stringify(userInfo)

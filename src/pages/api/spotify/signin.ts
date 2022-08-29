@@ -36,6 +36,6 @@ export default async function handler (req: NextApiRequest, res: NextApiResponse
     
         res.redirect(LOGIN_URL);
     } else {
-        res.redirect(403, `${protocol}://${req.headers.host}`)
+        res.status(403).redirect(`${protocol}://${host}/`)
     }
 }

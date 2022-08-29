@@ -1,11 +1,12 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { Bars } from "react-loader-spinner";
-import { UseProtectedRoute } from "../../components/Routing";
-import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
-import { getFollowedArtistsSpotify, getSavedSongsSpotify, getUserPlaylistsSpotify } from "../../lib/Spotify";
+import { Bars, ProgressBar } from "react-loader-spinner";
 import useAuth from "../../hooks/useAuth";
-import { importArtistsSpotify, importPlaylistsSpotify, importSongsSpotify } from "../../lib/Firebase";
+import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
+import { UseProtectedRoute } from "../../components/Routing";
+
+import { getFollowedArtistsSpotify, getSavedSongsSpotify, getUserPlaylistsSpotify } from "../../lib/Spotify";
+import { importArtistsSpotify, importPlaylistSpotify, importSongsSpotify } from "../../lib/Firebase";
 
 import Image from "next/image";
 import Import from '../../assets/webapp/transfer/import.svg';
@@ -43,8 +44,10 @@ export default UseProtectedRoute(TransferPage);
 
 
 const Transfer = ({ platforms }) => {
+
+    // Toolbar
     const [toggleChecked, setToggleChecked] = useState(false);
-    const [selectedPlatform, setSelectedPlatform] = useState(platforms[0] ?? null);
+    const [selectedPlatform, setSelectedPlatform] = useState(platforms[0] ?? 'error: no platform connected');
     const [selectedContent, setSelectedContent] = useState('playlists');
     const [loaded, setLoaded] = useState(false);
     const [query, setQuery] = useState({
@@ -52,10 +55,15 @@ const Transfer = ({ platforms }) => {
         platform: selectedPlatform,
         content: selectedContent
     });
+
+    // Loading data
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // console.log(data);
+    // Transfer
+    const [isTransfering, setIsTransfering] = useState(false);
+    const [progress, setProgress] = useState([0, 0]);
+    // console.log(`PROGRESS : ${progress[0]} of ${progress[1]}`);
 
     useEffect(() => {
         setLoaded(false);
@@ -93,16 +101,17 @@ const Transfer = ({ platforms }) => {
                 {!loaded ? 
                     <LoadButton setLoaded={setLoaded} query={query} setData={setData} setIsLoading={setIsLoading} isLoading={isLoading} />
                     :
-                    toggleChecked ? <ImportButton query={query} data={data} /> : <ExportButton query={query} data={data} />
+                    toggleChecked ? <ImportButton query={query} data={data} setIsTransfering={setIsTransfering} setProgress={setProgress} /> : <ExportButton query={query} data={data} />
                 }
 
             </div>
-            <div className="mt-5 overflow-auto">
+            <div className={`mt-5 h-full ${!isTransfering ? 'overflow-auto' : null}`}>
 
                 <Loader show={isLoading} />
 
-                <div className="flex flex-col">
+                <Transfering show={isTransfering} progress={progress} />
 
+                <div className="flex flex-col">
 
                     {loaded && data != undefined ? 
                         (() => {switch(query.content) {
@@ -245,45 +254,41 @@ const Artist = ({ img, name, id }) => {
     )
 }
 
-const ImportButton = ({ query, data }) => {
+const ImportButton = ({ query, data, setIsTransfering, setProgress }) => {
 
     const { user } = useAuth();
 
     const importDB = async () => {
-
+        setIsTransfering(true);
         let allInputs = Array.from(document.getElementsByName('data')) as HTMLInputElement[];
         let allCheckboxes = allInputs.filter(input => input.type === 'checkbox');
-        // console.log('CHECKBOXES', allCheckboxes);
-        // console.log('DATA', data);
 
-        let importData = []
+        let importData = [];
         for (let i = 0; i < allCheckboxes.length; i++) {
             if(allCheckboxes[i].checked) {
                 importData.push(data[i])
             }
         };
 
-        console.log('IMPORTED DATA', importData);
-
-        let progress;
         switch (query.content) {
             case 'playlists':
                 switch(query.platform.api) {
                     case 'youtube': break;
-                    case 'spotify': importPlaylistsSpotify(importData, user); break;
+                    case 'spotify': await importPlaylistSpotify(importData, user, setProgress); break;
                 } break;
             case 'songs':
                 switch(query.platform.api) {
                     case 'youtube': break;
-                    case 'spotify': importSongsSpotify(importData, user); break;
+                    case 'spotify': await importSongsSpotify(importData, user, setProgress); break;
                 } break;
             case 'artists':
                 switch(query.platform.api) {
                     case 'youtube': break;
-                    case 'spotify': importArtistsSpotify(importData, user); break;
+                    case 'spotify': await importArtistsSpotify(importData, user, setProgress); break;
                 } break;
         };
-
+        setIsTransfering(false);
+        setProgress([0, 0]);
     }
 
     return (
@@ -413,7 +418,6 @@ const Toggle = ({ checked, setChecked }) => {
 }
 
 
-
 const Loader = ({ show }) => {
     return show ? (
         <div className="flex mx-auto justify-center mt-20">
@@ -429,6 +433,26 @@ const Loader = ({ show }) => {
         </div>
     ) : null;
 }
+
+const Transfering = ({ show, progress }) => {
+    return show ? (
+        <div className="flex mx-auto justify-center h-full z-50 backdrop-blur">
+            <div className="flex flex-col my-auto justify-center backdrop-blur">
+                <ProgressBar
+                    height="125"
+                    width="125"
+                    ariaLabel="progress-bar-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="progress-bar-wrapper"
+                    borderColor = '#333333'
+                    barColor = '#F2C94C'
+                />
+                <h1 className="font-bold text-lg text-center"> Progress : {progress[0]}/{progress[1]}</h1>
+            </div>
+        </div>
+    ) : null;
+}
+
 
 
 

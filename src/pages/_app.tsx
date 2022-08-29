@@ -12,7 +12,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
         <AuthProvider>
             <AppLayout>
                 <AuthStateChanged>
-                <Component {...pageProps} />
+                    <Component {...pageProps} />
                 </AuthStateChanged>
             </AppLayout>
         </AuthProvider>

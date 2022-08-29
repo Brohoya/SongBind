@@ -3012,11 +3012,17 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   "version" "16.13.1"
 
+"react-is@^18.2.0":
+  "integrity" "sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w=="
+  "resolved" "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
+  "version" "18.2.0"
+
 "react-loader-spinner@^5.1.7-beta.1":
-  "integrity" "sha512-Lo5qVWUyhAMs92PffsJRwH6iqPTgBmC7pocFA8Z3fkxS8s9OVKTIKRMvgywQ+CAxEXN9H5AqziYS+8zT7yK3CQ=="
-  "resolved" "https://registry.npmjs.org/react-loader-spinner/-/react-loader-spinner-5.1.7-beta.1.tgz"
-  "version" "5.1.7-beta.1"
+  "integrity" "sha512-eEUmZBsVli0VAZwsUjeYHU0X3P/utv/Oz5zI8oQa0Xx+ttIZMXYa/WmqHoL2jmqPM01zGB3fyMZjs7xsl+uvRw=="
+  "resolved" "https://registry.npmjs.org/react-loader-spinner/-/react-loader-spinner-5.3.3.tgz"
+  "version" "5.3.3"
   dependencies:
+    "react-is" "^18.2.0"
     "styled-components" "^5.3.5"
     "styled-tools" "^1.7.2"
 

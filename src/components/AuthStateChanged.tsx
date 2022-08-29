@@ -16,7 +16,8 @@ export default function AuthStateChanged({ children }) {
 
 	if (loading) {
 		return (
-			<main className="fixed left-0 right-0 top-0 bottom-0 z-50 backdrop-blur">
+			<main className="fixed left-0 right-0 h-full z-50 backdrop-blur">
+                {/* <div className="flex justify-center my-72"> */}
                 <div className="flex justify-center my-72">
                     <Bars
                         height="150"
