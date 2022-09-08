@@ -1,13 +1,11 @@
 import { User } from "firebase/auth";
 import { doc, DocumentSnapshot, getDoc, getFirestore, writeBatch } from "firebase/firestore";
 import { Dispatch, SetStateAction } from "react";
-import { getSpotifyData, getSpotifyToken } from "./Spotify";
 
 
-
-/**
- * Convert a firestore document to JSON
- */
+/******************************************************************************************
+*                            Convert a firestore document to json                         *
+******************************************************************************************/
   
 export function postToJSON(doc: DocumentSnapshot) {
     const data = doc.data();
@@ -19,25 +17,10 @@ export function postToJSON(doc: DocumentSnapshot) {
     }
 }
 
-/**
- * Import JSON file to firestore data model
- */
 
-export function importFunctionSelector(platform: string, content: string) {
-    switch (platform) {
-        case 'spotify':
-            
-            return;
-    
-        case 'youtube':
-
-            return;
-    }
-}
-
-/**
- * Spotify content import functions
- */
+/******************************************************************************************
+*                          Spotify content import functions                               *
+******************************************************************************************/
 
 
 export async function importPlaylistSpotify(data: any[], user: User, setProgress: Dispatch<SetStateAction<number[]>>) {

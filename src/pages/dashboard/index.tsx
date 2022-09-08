@@ -39,14 +39,14 @@ export default UseProtectedRoute(Dashboard);
 
 const Platform = ({ platform }): JSX.Element => {
     return (
-        // <li className={'m-0 ring-4 rounded-md ring-gray-700 p-3'}>
+        <li className={'m-0 ring-4 rounded-xl ring-gray-400 p-3'}>
             <Link className="m-0 ring-4 rounded-md ring-gray-700 p-3" href={'/platforms'}>
-                <button className="my-auto">
+                <button className="my-auto h-fit">
                     <Image className="my-auto" src={`/streamingPlatforms/${platform.img}.png`} width={"35"} height={"35"} priority />
                     {/* <img src={`/streamingPlatforms/${img}.png`} alt=""/> */}
                 </button>
             </Link>
-        // </li>
+        </li>
     );
 }
 
