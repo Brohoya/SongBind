@@ -4,17 +4,15 @@ Songbind is a project in early development that wants to provide the user differ
 
 The app is available on https://songbind.vercel.app/ but only for desktop screens.
 
-
-
 ## Progress :
 
 - Features related to basic streaming platforms usage :
 
-| Features        | Youtube   | Spotify | AppleMusic | Deezer | SoundCloud |
-|:---------------:|:---------:|:-------:|:----------:|:------:|:----------:|
-| Auth/connection | &check; | &check;   | - [ ]      | - [ ]  | - [ ]      |
-| Import          | [ ]       | - [x]   | - [ ]      | - [ ]  | - [ ]      |
-| Export          | - [ ]     | - [x]   | - [ ]      | - [ ]  | - [ ]      |
+| Features        | Youtube | Spotify | AppleMusic | Deezer  | SoundCloud |
+|:---------------:|:-------:|:-------:|:----------:|:-------:|:----------:|
+| Auth/connection | &check; | &check; | &cross;    | &cross; | &cross;    |
+| Import          | &cross; | &check; | &cross;    | &cross; | &cross;    |
+| Export          | &cross; | &check; | &cross;    | &cross; | &cross;    |
 
 - Other features :
   
@@ -23,7 +21,5 @@ The app is available on https://songbind.vercel.app/ but only for desktop screen
   - [ ] Playlist creation page
 
 ```
-&check;
-```
 
-- &check; 
+```
