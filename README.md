@@ -20,6 +20,3 @@ The app is available on https://songbind.vercel.app/ but only for desktop screen
   
   - [ ] Playlist creation page
 
-```
-
-```
