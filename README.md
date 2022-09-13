@@ -12,12 +12,12 @@ The app is available on https://songbind.vercel.app/ but only for desktop screen
 
 | Features        | Youtube | Spotify | AppleMusic | Deezer | SoundCloud |
 |:---------------:|:-------:|:-------:|:----------:|:------:|:----------:|
-| Auth/connection | [x]     | [x]     | []         | []     | []         |
-| Import          | []      | [x]     | []         | []     | []         |
-| Export          | []      | [x]     | []         | []     | []         |
+| Auth/connection | - [x]   | - [x]   | - [ ]      | - [ ]  | - [ ]      |
+| Import          | [ ]     | - [x]   | - [ ]      | - [ ]  | - [ ]      |
+| Export          | - [ ]   | - [x]   | - [ ]      | - [ ]  | - [ ]      |
 
 - Other features :
   
-  - [] Page to explore music artists, genres and playlists
+  - [ ] Page to explore music artists, genres and playlists
   
-  - [] Playlist creation page
+  - [ ] Playlist creation page
