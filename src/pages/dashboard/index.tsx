@@ -4,15 +4,27 @@ import Loader from "../../components/Loader";
 import { UseProtectedRoute } from "../../components/Routing";
 import usePlatforms, { IPlatforms } from "../../hooks/usePlatforms";
 import Image from "next/image";
+import { importPlaylistsFirebase } from "../../lib/Firebase";
+import useAuth from "../../hooks/useAuth";
+import { useEffect } from "react";
 
 const Dashboard: NextPage = () => {
     const {platforms, isLoading}: IPlatforms = usePlatforms();
+    const { user } = useAuth();
+    // const songs = importPlaylistsFirebase(user);
+
+    // console.log(songs);
+
+    const loadData = async () => {
+        const songs = await importPlaylistsFirebase(user);
+        // console.log(songs);
+    }
 
     return (
         <div className="app">
             <Loader show={isLoading} />
 
-            <div className="flex flex-col justify-center space-y-20">
+            <div onLoad={loadData} className="flex flex-col justify-center space-y-20">
                 <div className="w-full font-bold text-2xl flex flex-row space-x-5 my-auto">
                     <h1 className="my-auto">Platforms : </h1>
                     <ul className="flex flex-row space-x-5 m-0">

@@ -184,5 +184,62 @@ export async function importArtistsSpotify(data: any[], user: User, setProgress:
     });
 }
 
+/******************************************************************************************
+*                          Firebase content import functions                              *
+******************************************************************************************/
 
+export async function importSongsFirebase(user: User) {
+    return new Promise(async (resolve, reject) => {
+        const userRef = doc(getFirestore(), "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
+
+        if(userData !== undefined) {
+            const songs = userData.songs;
+            const songsArray: any[] = [];
+            for (const song in songs) {
+                const songRef = doc(getFirestore(), "songs", song);
+                const songDoc = await getDoc(songRef);
+                const songData = songDoc.data();
+                if(songData !== undefined) {
+                    songsArray.push(songData);
+                }
+            }
+            console.log("Songs imported from db", songsArray);
+            resolve(songsArray);
+        } else {
+            console.log("User data is undefined");
+            resolve([]);
+        }
+    }).catch(err => {
+        console.log("ERROR HAPPENED", err);
+    });
+}
+
+export async function importPlaylistsFirebase(user: User) {
+    return new Promise(async (resolve, reject) => {
+        const userRef = doc(getFirestore(), "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        const userData = userDoc.data();
+
+        if(userData !== undefined) {
+            const playlists = userData.playlists;
+            const playlistsArray: any[] = [];
+            for (const playlist in playlists) {
+                const playlistRef = doc(getFirestore(), "playlists", playlist);
+                const playlistDoc = await getDoc(playlistRef);
+                const playlistData = playlistDoc.data();
+                if(playlistData !== undefined) {
+                    playlistsArray.push(playlistData);
+                }
+            }
+            resolve(playlistsArray);
+        } else {
+            console.log("User data is undefined");
+            resolve([]);
+        }
+    }).catch(err => {
+        console.log("ERROR HAPPENED", err);
+    });
+}
 

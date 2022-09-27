@@ -12,7 +12,7 @@ export default function useActivePage() {
         case 'transfer': activePage = "Transfer"; break;
         case 'explore': activePage = "Explore"; break;
         case 'platforms': activePage = "Platforms"; break;
-        default: activePage = "Not found"; break;
+        default: activePage = "Songbind"; break;
     }
 
     return activePage;

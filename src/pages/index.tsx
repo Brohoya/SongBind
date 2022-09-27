@@ -6,6 +6,7 @@ import useAuth from '../hooks/useAuth';
 import Logo from "../assets/webapp/sidebar/logo.svg";
 import Hero from "../assets/website/image_accueil.svg";
 import Down from '../assets/website/arrow-down.svg';
+import Header from '../components/Header';
 
 
 const Home: NextPage = () => {
@@ -13,10 +14,7 @@ const Home: NextPage = () => {
 
   return (
     <main className='landing-page bg-yellow-100/10'>
-      <Head>
-        <title>SongBind</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <Header />
 
       <div className='w-10/12 mx-auto'>
         <nav className='navbar mt-5 bg-white shadow-md shadow-[rgba(0,0,0,0.35)] rounded-3xl'>
